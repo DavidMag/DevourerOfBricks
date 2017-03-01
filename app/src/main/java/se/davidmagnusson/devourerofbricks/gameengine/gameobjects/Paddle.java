@@ -41,7 +41,7 @@ public class Paddle {
         this.screenY = screenY;
 
         //Set standard speed
-        movementSpeed = 200;
+        movementSpeed = 450;
 
         //Set standard size
         length = (int) (screenX / 12);
@@ -57,20 +57,12 @@ public class Paddle {
     }
 
     /**
-     * This method returns the paddles coordinates to be drawn or checked for collisions
-     * @return the paddles coordinates as a RectF object
-     */
-    public RectF getRect() {
-        return paddleRect;
-    }
-
-    /**
      * This method does the moving logic for the paddle and also the wall collision logic.
      * It takes the fps to make sure that the paddle always move at the same speed independent of
      * the current fps / mobile performance
      * @param fps The current fps, as a long
      */
-    public void update(long fps){
+    public void update(int fps){
         //Check which direction the paddle is going
         if (movingDirection == LEFT){
             //make sure that the paddle isn't going out of boundaries
@@ -106,5 +98,13 @@ public class Paddle {
      */
     public void setMovingDirection(byte movingDirection){
         this.movingDirection = movingDirection;
+    }
+
+    /**
+     * This method returns the paddles coordinates to be drawn or checked for collisions
+     * @return the paddles coordinates as a RectF object
+     */
+    public RectF getRect() {
+        return paddleRect;
     }
 }

@@ -4,11 +4,15 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import se.davidmagnusson.devourerofbricks.R;
+import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Ball;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Paddle;
 
 /**
@@ -23,6 +27,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     //The Game Objects
     Paddle paddle;
+    Ball ball;
 
     //For the drawing
     private Paint painter;
@@ -63,8 +68,12 @@ public class GameView extends SurfaceView implements Runnable {
         ourHolder = getHolder();
         painter = new Paint();
 
-        //Init the paddle
+        //Init the game objects
         paddle = new Paddle(screenX, screenY);
+        ball = new Ball(screenX, screenY);
+
+        //create the game scene
+        createGameScene();
     }
 
     /**
@@ -96,13 +105,27 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     /**
+     * It's here the scene is built, the ball is reset to start position, the bricks are generated
+     */
+    private void createGameScene(){
+        //TODO
+        ball.reset();
+    }
+
+    /**
      * The update method is where we check for collisions, update new positions and all the
      * other logic.
      */
     private void update() {
 
-        //Update the paddle
+        //Update the game objects
         paddle.update(fps);
+        ball.update(fps);
+
+        //Check if ball and paddle collides
+        if (RectF.intersects(ball.getRect(), paddle.getRect())){
+            ball.paddleHit(paddle.getRect());
+        }
     }
 
     /**
@@ -124,7 +147,10 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawRect(paddle.getRect(), painter);
 
             //BALL
-
+            canvas.drawCircle(ball.getRect().left + ball.getRadius(),
+                    ball.getRect().top + ball.getRadius(),
+                    ball.getRadius(),
+                    painter);
 
             //BRICKS
 
@@ -134,6 +160,10 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawText("FPS: " + fps, (screenX / 2), (screenY / 2), painter);
 
             //PAUSE
+            if (isPaused) {
+                drawPaused();
+
+            }
 
             //WIN
 
@@ -143,6 +173,7 @@ public class GameView extends SurfaceView implements Runnable {
             ourHolder.unlockCanvasAndPost(canvas);
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -178,10 +209,46 @@ public class GameView extends SurfaceView implements Runnable {
      */
     public void onPause(){
         isPlaying = false;
+        isPaused = true;
         try{
             gameThread.join();
         } catch (Exception ex){
             Log.e("DoB", ex.toString());
         }
+    }
+
+    /**
+     * This is some extracted code from the draw() method to make is easier to follow
+     * this method draws a is paused layer over the screen.
+     */
+    private void drawPaused() {
+        //Draw a half transparent black background over everything
+        canvas.drawColor(Color.argb(120, 0, 0, 0));
+        //A new rect to work with
+        Rect r = new Rect();
+        canvas.getClipBounds(r);
+        int cHeight = r.height();
+        int cWidth = r.width();
+
+        painter.setColor(Color.argb(255, 120,120,120));
+        painter.setTextAlign(Paint.Align.LEFT);
+
+        //Get the Strings
+        String paused = getResources().getString(R.string.in_game_paused);
+        String press = getResources().getString(R.string.in_game_press_to_start);
+
+        //Prepare the paint
+        painter.setTextSize(200);
+        painter.getTextBounds(paused, 0, paused.length(), r);
+
+        //Calc the x, y and draw the text
+        float x = cWidth / 2f - r.width() / 2f - r.left;
+        float y = cHeight / 2f + r.height() / 2f - r.bottom;
+        canvas.drawText(paused, x, y, painter);
+        //Just change the size, prepare the bound, recalc the x and draw second text
+        painter.setTextSize(50);
+        painter.getTextBounds(press, 0, press.length(), r);
+        x = cWidth / 2f - r.width() / 2f - r.left;
+        canvas.drawText(press, x, y + 150, painter);
     }
 }

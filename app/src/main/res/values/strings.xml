@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Devourer of Bricks</string>
+
+    <!-- IN GAME STRINGS -->
+    <string name="in_game_paused">PAUSED</string>
+    <string name="in_game_press_to_start">press to start</string>
 </resources>
