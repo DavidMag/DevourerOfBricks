@@ -9,7 +9,8 @@ import android.view.Display;
 import se.davidmagnusson.devourerofbricks.gameengine.GameView;
 
 /**
- * Created by davidmagnusson on 2017-02-28.
+ * Here is where the games take place. It uses a own View that extends the SurfaceView class
+ * to run the game in.
  */
 
 public class GameActivity extends Activity {

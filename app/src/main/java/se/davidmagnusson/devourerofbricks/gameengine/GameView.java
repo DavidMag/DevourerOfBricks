@@ -5,13 +5,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Paddle;
 
 /**
- * Created by davidmagnusson on 2017-02-28.
+ * This class is where the game runs, it extends the SurfaceView class and
+ * implements the Runnable interface so that a thread can run it.
+ * All you'll have to worry about is to init it correctly and pausing and resuming it.
  */
 public class GameView extends SurfaceView implements Runnable {
 
@@ -41,23 +44,17 @@ public class GameView extends SurfaceView implements Runnable {
     volatile boolean isPlaying;
     boolean isPaused;
 
-    //Some shorts to use to simplify the choises later on
-    public static byte STOP = 0,
-                        LEFT = 1,
-                        RIGHT = 2;
-
     /**
      * Class constructor
      *
      * @param context the application context
-     * @param screenX the screens X resolution
-     * @param screenY the screens Y resolution
+     * @param screenX the screens X resolution, measured in pixels
+     * @param screenY the screens Y resolution, measured in pixels
      */
     public GameView(Context context, float screenX, float screenY){
         //Let the original SurfaceView do some magic in the constructor
         super(context);
 
-        Log.i("DoB", "Constructor");
         //Save the screens resolution
         this.screenX = screenX;
         this.screenY = screenY;
@@ -65,6 +62,9 @@ public class GameView extends SurfaceView implements Runnable {
         //Get the holder and create a new Paint
         ourHolder = getHolder();
         painter = new Paint();
+
+        //Init the paddle
+        paddle = new Paddle(screenX, screenY);
     }
 
     /**
@@ -101,6 +101,8 @@ public class GameView extends SurfaceView implements Runnable {
      */
     private void update() {
 
+        //Update the paddle
+        paddle.update(fps);
     }
 
     /**
@@ -118,8 +120,11 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawColor(Color.argb(255, 0,0,0));
 
             //PADDLE
+            painter.setColor(Color.argb(255, 0, 255, 0));
+            canvas.drawRect(paddle.getRect(), painter);
 
             //BALL
+
 
             //BRICKS
 
@@ -137,6 +142,25 @@ public class GameView extends SurfaceView implements Runnable {
             //Set the canvas to the screen
             ourHolder.unlockCanvasAndPost(canvas);
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction() & MotionEvent.ACTION_MASK){
+            case MotionEvent.ACTION_DOWN:
+                isPaused = false;
+
+                if (event.getX() < (screenX / 2)){
+                    paddle.setMovingDirection(Paddle.LEFT);
+                } else {
+                    paddle.setMovingDirection(Paddle.RIGHT);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                paddle.setMovingDirection(Paddle.STOP);
+                break;
+        }
+        return true;
     }
 
     /**
