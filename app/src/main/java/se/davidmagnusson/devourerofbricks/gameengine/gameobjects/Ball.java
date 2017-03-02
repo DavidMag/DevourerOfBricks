@@ -100,7 +100,56 @@ public class Ball {
         float hitPoint = middleOfBall / (paddle.right - paddle.left);
 
         xSpeed = (short) (600 * hitPoint - 300);
+        y = (int) paddle.top - sideSize - 1;
         invertY();
+    }
+
+    /**
+     * This method is used when a brick got hit and to check which of the sides
+     * that the ball collided with.
+     * @param brick the RectF from the brick that was hitten
+     */
+    public void brickCollision(RectF brick) {
+        /*
+          1 │  2  │ 3
+          ──╆━━━━━╅──
+          4 ┃  5  ┃ 6
+          ──╄━━━━━╃──
+          7 │  8  │ 9
+        */
+        if (y + sideSize >= brick.bottom){      // 8 (7 9)
+            invertY();
+            y = (int) brick.bottom + 1;
+            if (x < brick.left){                // 7
+                invertX();
+                x = (int) brick.left - sideSize - 1;
+            } else {                            // 9
+                invertX();
+                x = (int) brick.right + 1;
+            }
+        } else if (y + sideSize <= brick.top){  // 2 (1 3)
+            invertY();
+            y = (int) brick.top - sideSize - 1;
+            if (x <= brick.left){               // 1
+                invertX();
+                x = (int) brick.left - sideSize - 1;
+            } else {                            // 3
+                invertX();
+                x = (int) brick.right + 1;
+            }
+        } else {                                // 4 5 6
+            if (x + sideSize <= brick.left){    // 4
+                invertX();
+                x = (int) brick.left - sideSize - 1;
+            } else if (x >= brick.right){       // 6
+                invertX();
+                x = (int) brick.right + 1;
+            } else {                            // 5
+                invertY();
+                x = (int) brick.centerX();
+                y = (int) brick.bottom + 1;
+            }
+        }
     }
 
     /**
