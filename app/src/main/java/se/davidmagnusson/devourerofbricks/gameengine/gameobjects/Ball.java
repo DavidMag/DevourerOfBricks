@@ -73,9 +73,9 @@ public class Ball {
             } else if (x + sideSize + (xSpeed / fps) > screenX) { //RIGHT WALL
                 invertX();
                 resetX((int) screenX - sideSize);
-            } else if (y + (ySpeed / fps) < 0) { //ROOF
+            } else if (y + (ySpeed / fps) < (0 + screenY / 10)) { //ROOF
                 invertY();
-                resetY(0);
+                resetY((int) screenY / 10);
             } else { //NO HIT, REGULAR MOVEMENT
                 x += (xSpeed / fps);
                 y += (ySpeed / fps);
@@ -117,34 +117,34 @@ public class Ball {
           ──╄━━━━━╃──
           7 │  8  │ 9
         */
-        if (y + sideSize >= brick.bottom){      // 8 (7 9)
+        if (ballRect.bottom >= brick.bottom){               // 8 (7 9)
             invertY();
             y = (int) brick.bottom + 1;
-            if (x < brick.left){                // 7
+            if (ballRect.centerX() < brick.left){           // 7
                 invertX();
                 x = (int) brick.left - sideSize - 1;
-            } else {                            // 9
+            } else if (ballRect.centerX() > brick.right){   // 9
                 invertX();
                 x = (int) brick.right + 1;
             }
-        } else if (y + sideSize <= brick.top){  // 2 (1 3)
+        } else if (ballRect.top <= brick.top){              // 2 (1 3)
             invertY();
             y = (int) brick.top - sideSize - 1;
-            if (x <= brick.left){               // 1
+            if (ballRect.centerX() <= brick.left){          // 1
                 invertX();
                 x = (int) brick.left - sideSize - 1;
-            } else {                            // 3
+            } else if (ballRect.centerX() > brick.right){   // 3
                 invertX();
                 x = (int) brick.right + 1;
             }
-        } else {                                // 4 5 6
-            if (x + sideSize <= brick.left){    // 4
+        } else {                                            // 4 5 6
+            if (ballRect.left <= brick.left){               // 4
                 invertX();
                 x = (int) brick.left - sideSize - 1;
-            } else if (x >= brick.right){       // 6
+            } else if (ballRect.right >= brick.right){      // 6
                 invertX();
                 x = (int) brick.right + 1;
-            } else {                            // 5
+            } else {                                        // 5
                 invertY();
                 x = (int) brick.centerX();
                 y = (int) brick.bottom + 1;
@@ -155,14 +155,14 @@ public class Ball {
     /**
      * Inverts the Y speed, used when hits a brick, roof or paddle.
      */
-    public void invertY(){
+    private void invertY(){
         ySpeed = (short) -ySpeed;
     }
 
     /**
      * Inverts the X speed, used when the ball hits the wall or side of a brick
      */
-    public void invertX(){
+    private void invertX(){
         xSpeed = (short) -xSpeed;
     }
 
@@ -172,7 +172,7 @@ public class Ball {
      * @param left The new lower left corner coordinate, should be right next to the collided object
      *             or right next to + the balls size.
      */
-    public void resetX(int left){
+    private void resetX(int left){
         ballRect.left = left;
         ballRect.right = left + sideSize;
     }
@@ -183,7 +183,7 @@ public class Ball {
      * @param top The new upper left corner coordinate, should be right under the collided object
      *            if it's hitting downwards it should be right over + balls size.
      */
-    public void resetY(int top){
+    private void resetY(int top){
         ballRect.top = top;
         ballRect.bottom = top + sideSize;
     }

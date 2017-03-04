@@ -2,13 +2,12 @@ package se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks;
 
 import android.graphics.Color;
 import android.graphics.RectF;
-import android.support.v7.widget.LinearLayoutCompat;
 
 /**
  * This is the basic brick and it will be removed on the first hit
  * FOR MORE INFORMATION CHECK THE BRICK INTERFACE
  */
-public class BasicBrick implements Brick {
+class BasicBrick implements Brick {
 
     private RectF brickRect;
     private int color;
@@ -21,8 +20,8 @@ public class BasicBrick implements Brick {
      * @param width the width of the brick, measured in pixels
      * @param height the height of the brick, measured in pixels
      */
-    public BasicBrick(byte row, byte column, short width, short height){
-        byte padding = 1;
+    BasicBrick(byte row, byte column, short width, short height){
+        byte padding = 2;
 
         color = Color.argb(255, 0, 255, 0);
 

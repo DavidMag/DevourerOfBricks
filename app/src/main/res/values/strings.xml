@@ -4,4 +4,7 @@
     <!-- IN GAME STRINGS -->
     <string name="in_game_paused">PAUSED</string>
     <string name="in_game_press_to_start">press to start</string>
+    <string name="in_game_hud_time">TIME</string>
+    <string name="in_game_hud_points">POINTS</string>
+    <string name="in_game_hud_lifes">LIFE</string>
 </resources>

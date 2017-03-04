@@ -7,7 +7,7 @@ import android.graphics.RectF;
  * This brick is indestructible and won't be removed when hit
  * FOR MORE INFORMATION CHECK THE BRICK INTERFACE
  */
-public class IndestructibleBrick implements Brick {
+class IndestructibleBrick implements Brick {
 
     private RectF brickRect;
     private int color;
@@ -19,10 +19,10 @@ public class IndestructibleBrick implements Brick {
      * @param width
      * @param height
      */
-    public IndestructibleBrick(byte row, byte column, short width, short height){
-        byte padding = 1;
+    IndestructibleBrick(byte row, byte column, short width, short height){
+        byte padding = 2;
 
-        color = Color.argb(255, 123, 123, 123);
+        color = Color.argb(255, 23, 100, 23);
 
         int left = column * width + padding;
         int right = left + width - (padding * 2);

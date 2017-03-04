@@ -31,7 +31,7 @@ public class GameActivity extends Activity {
         Point size = new Point();
         display.getRealSize(size);
 
-        gameView = new GameView(this, size.x, size.y);
+        gameView = new GameView(this, getIntent().getByteExtra("level", (byte) 1), size.x, size.y);
         setContentView(gameView);
     }
 

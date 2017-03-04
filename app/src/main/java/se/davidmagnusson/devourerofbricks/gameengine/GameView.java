@@ -1,6 +1,7 @@
 package se.davidmagnusson.devourerofbricks.gameengine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,10 +16,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import se.davidmagnusson.devourerofbricks.R;
+import se.davidmagnusson.devourerofbricks.activities.GameActivity;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Ball;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Paddle;
-import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.BasicBrick;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.Brick;
+import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.BrickFactory;
+import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.BrickLayoutGetter;
 
 /**
  * This class is where the game runs, it extends the SurfaceView class and
@@ -34,7 +37,24 @@ public class GameView extends SurfaceView implements Runnable {
     private Paddle paddle;
     private Ball ball;
     private LinkedList<Brick> bricks;
+    private byte[] brickLayout;
 
+    //Game variables
+    private byte life;
+    private int points;
+    private boolean ballDirectionSwitched;
+    //Time variables
+    private long gameTimeStart;
+    private long gameTimeMillis;
+    private long gameTimeSedonds;
+    private long startPauseTime;
+    private long stopPauseTime;
+    private long pauseTime;
+    //hud
+    private String timeStr;
+    private String pointsStr;
+    private String lifeStr;
+    private String hud;
 
     //For the drawing
     private Paint painter;
@@ -63,7 +83,7 @@ public class GameView extends SurfaceView implements Runnable {
      * @param screenX the screens X resolution, measured in pixels
      * @param screenY the screens Y resolution, measured in pixels
      */
-    public GameView(Context context, float screenX, float screenY){
+    public GameView(Context context, byte level, float screenX, float screenY){
         //Let the original SurfaceView do some magic in the constructor
         super(context);
 
@@ -75,12 +95,18 @@ public class GameView extends SurfaceView implements Runnable {
         ourHolder = getHolder();
         painter = new Paint();
 
+        //Init the hud strings
+        timeStr = getResources().getString(R.string.in_game_hud_time);
+        pointsStr = getResources().getString(R.string.in_game_hud_points);
+        lifeStr = getResources().getString(R.string.in_game_hud_lifes);
+
         //Init the game objects
         paddle = new Paddle(screenX, screenY);
         ball = new Ball(screenX, screenY);
         bricks = new LinkedList<>();
 
         //create the game scene
+        this.brickLayout = new BrickLayoutGetter().getBrickLayout(level);
         createGameScene();
     }
 
@@ -115,17 +141,33 @@ public class GameView extends SurfaceView implements Runnable {
     /**
      * It's here the scene is built, the ball is reset to start position, the bricks are generated
      */
-    private void createGameScene(){
-        //TODO
+    private void createGameScene(){ //TODO
+
+        //Init some game variables
+        life = 3;
+        points = 0;
+
+        //time variables
+        gameTimeStart = System.currentTimeMillis();
+        gameTimeSedonds = 0;
+        gameTimeMillis = 0;
+        pauseTime = 0;
+        startPauseTime = 0;
+
         ball.reset();
 
-        //TODO temporary brick init
-        short width = (short) (screenX / 6);
-        short height = 50;
+        //Brick building
+        //Get screen independent block size
+        short width = (short) (screenX / 5);
+        short height = (short) (screenY / 20);
 
-        for (byte row = 0; row < 4; row++){
-            for (byte column  = 0; column < 6; column++){
-                bricks.add(new BasicBrick(row, column, width, height));
+        BrickFactory brickFactory = new BrickFactory();
+
+        //Start at row 3 (0 indexed) to make space for the HUD
+        byte idx = 0;
+        for (byte row = 2; row < 7; row++){
+            for (byte column  = 0; column < 5; column++){
+                bricks.add(brickFactory.getBrick(brickLayout[idx++] ,row, column, width, height));
             }
         }
     }
@@ -145,16 +187,40 @@ public class GameView extends SurfaceView implements Runnable {
             ball.paddleHit(paddle.getRect());
         }
 
+        ballDirectionSwitched = false;
         for (Iterator<Brick> iterator = bricks.iterator(); iterator.hasNext();){
             Brick brick = iterator.next();
-            if (RectF.intersects(brick.getRect(), ball.getRect())){
-                ball.brickCollision(brick.getRect());
-                if (brick.gotHit()){
-                   iterator.remove();
+            if (brick != null) {
+                if (RectF.intersects(brick.getRect(), ball.getRect())) {
+                    if (!ballDirectionSwitched) {
+                        ball.brickCollision(brick.getRect());
+                        ballDirectionSwitched = true;
+                    }
+                    if (brick.gotHit()) {
+                        points += 10;
+                        iterator.remove();
+                    }
                 }
             }
         }
 
+        //if ball hits floor
+        if (ball.getRect().bottom > screenY){
+            if (--life == 0){
+                gameEnded(false);
+            } else {
+                ball.reset();
+            }
+        }
+
+        //if won
+        if (bricksSize() == 0){
+            gameEnded(true);
+        }
+
+        //Update the HUD time
+        gameTimeMillis = System.currentTimeMillis() - gameTimeStart - pauseTime;
+        gameTimeSedonds = gameTimeMillis / 1000;
     }
 
     /**
@@ -189,10 +255,14 @@ public class GameView extends SurfaceView implements Runnable {
                 }
             }
 
-            //HUD
-            painter.setTextSize(40);
+            //hud
+            painter.setColor(Color.argb(100, 80, 80, 80));
+            canvas.drawRect(0, 0, screenX, (screenY / 10), painter);
             painter.setColor(Color.argb(255, 0, 255, 0)); //GREEN
-            canvas.drawText("FPS: " + fps, (screenX / 2), (screenY / 2), painter);
+            painter.setTextAlign(Paint.Align.CENTER);
+            painter.setTextSize(50);
+            hud = lifeStr +": "+ life +" | "+ pointsStr+": "+ points+ " | "+ timeStr +": "+ gameTimeSedonds;
+            canvas.drawText(hud , (screenX / 2), (screenY / 20) + 25, painter);
 
             //PAUSE
             if (isPaused) {
@@ -213,7 +283,7 @@ public class GameView extends SurfaceView implements Runnable {
      * This method handles all the user input (through the touch screen), mostly setting the paddles
      * moving direction or stopping it.
      * @param event auto generated by android, contains info about what happened (touched, released and so on)
-     * @return
+     * @return boolean if valid or not
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -240,6 +310,11 @@ public class GameView extends SurfaceView implements Runnable {
      * and we initialize our gameThread and then starts it.
      */
     public void onResume(){
+        if (startPauseTime != 0) {
+            stopPauseTime = System.currentTimeMillis();
+            pauseTime += stopPauseTime - startPauseTime;
+        }
+
         isPlaying = true;
         gameThread = new Thread(this);
         gameThread.start();
@@ -249,6 +324,7 @@ public class GameView extends SurfaceView implements Runnable {
      * In this method we turn of the "Game loop" and then waits for the thread to die
      */
     public void onPause(){
+        startPauseTime = System.currentTimeMillis();
         isPlaying = false;
         isPaused = true;
         try{
@@ -291,5 +367,33 @@ public class GameView extends SurfaceView implements Runnable {
         painter.getTextBounds(press, 0, press.length(), r);
         x = cWidth / 2f - r.width() / 2f - r.left;
         canvas.drawText(press, x, y + 150, painter);
+    }
+
+    /**
+     * Counts the size of the remaining bricks except the indestructible ones.
+     * @return the size - the indestructible, as a int
+     */
+    private int bricksSize() {
+        int numOfBricks = 0;
+        for (Brick brick: bricks){
+            if (!brick.getClass().getSimpleName().equals("IndestructibleBrick")){
+                numOfBricks++;
+            }
+        }
+        return numOfBricks;
+    }
+
+    /**
+     * Called when either the player wins the game or loses it. Starts a new score screen activity,
+     * with info about the game in the intent.
+     * @param won if the game won or lost
+     */
+    private void gameEnded(boolean won) { //TODO
+        Intent intent = new Intent(this.getContext(), GameActivity.class);
+        intent.putExtra("won", won);
+        intent.putExtra("time", gameTimeSedonds);
+        intent.putExtra("points", points);
+        intent.putExtra("life", life);
+        getContext().startActivity(intent);
     }
 }

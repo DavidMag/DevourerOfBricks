@@ -8,7 +8,7 @@ import android.graphics.RectF;
  * Also changes color when hit.
  * FOR MORE INFORMATION CHECK THE BRICK INTERFACE
  */
-public class TwoLifeBrick implements Brick {
+class TwoLifeBrick implements Brick {
 
     private RectF brickRect;
     private int color;
@@ -21,10 +21,10 @@ public class TwoLifeBrick implements Brick {
      * @param width
      * @param height
      */
-    public TwoLifeBrick(byte row, byte column, short width, short height){
-        byte padding = 1;
+    TwoLifeBrick(byte row, byte column, short width, short height){
+        byte padding = 2;
 
-        color = Color.argb(255, 255, 100, 0);
+        color = Color.argb(255, 0, 150, 0);
         lifes = 2;
 
         int left = column * width + padding;
