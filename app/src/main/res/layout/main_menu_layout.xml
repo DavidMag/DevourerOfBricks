@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        >
+
+        <TextView
+            android:text="@string/main_menu_app_name_devourer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_menu_devourer"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginStart="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:fontFamily="sans-serif"
+            android:textAllCaps="true"
+            android:textColor="@color/devourer_green"
+            android:textSize="36sp"
+            android:typeface="monospace" />
+
+        <TextView
+            android:text="@string/main_menu_app_name_of"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_menu_of"
+            android:textColor="@color/devourer_green"
+            android:textSize="24sp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/main_menu_devourer"
+            app:layout_constraintLeft_toLeftOf="@+id/guideline_25"
+            app:layout_constraintRight_toLeftOf="@+id/guideline_75"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:text="@string/main_menu_app_name_bricks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_menu_bricks"
+            android:textAllCaps="true"
+            android:textColor="@color/devourer_green"
+            android:textSize="36sp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/main_menu_of"
+            app:layout_constraintLeft_toLeftOf="@+id/guideline_25"
+            app:layout_constraintRight_toLeftOf="@+id/guideline_75"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:text="@string/main_menu_button_play"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_menu_button_play"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@+id/main_menu_bricks"
+            app:layout_constraintLeft_toLeftOf="@+id/guideline_25"
+            app:layout_constraintRight_toLeftOf="@+id/guideline_75"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/devourer_green"
+            android:fontFamily="sans-serif-medium"
+            android:background="@drawable/button"
+            android:onClick="playButtonClicked"/>
+
+        <android.support.constraint.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="592dp"
+            android:id="@+id/guideline_75"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="290dp"
+            app:layout_constraintGuide_percent="0.7552083" />
+
+        <android.support.constraint.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="592dp"
+            android:id="@+id/guideline_25"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="98dp"
+            app:layout_constraintGuide_percent="0.25520834" />
+
+        <Button
+            android:text="@string/main_menu_button_game_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_menu_button_game_services"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/main_menu_button_play"
+            app:layout_constraintLeft_toLeftOf="@+id/guideline_25"
+            app:layout_constraintRight_toLeftOf="@+id/guideline_75"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/button"
+            android:textColor="@color/devourer_green"
+            />
+
+        <Button
+            android:text="@string/main_menu_button_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_menu_button_about"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/main_menu_button_game_services"
+            app:layout_constraintLeft_toLeftOf="@+id/guideline_25"
+            app:layout_constraintRight_toLeftOf="@+id/guideline_75"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/button"
+            android:textColor="@color/devourer_green"
+            />
+    </android.support.constraint.ConstraintLayout>
+</layout>

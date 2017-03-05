@@ -7,4 +7,15 @@
     <string name="in_game_hud_time">TIME</string>
     <string name="in_game_hud_points">POINTS</string>
     <string name="in_game_hud_lifes">LIFE</string>
+
+    <!-- MAIN MENU -->
+    <string name="main_menu_app_name_devourer">devourer</string>
+    <string name="main_menu_app_name_of">of</string>
+    <string name="main_menu_app_name_bricks">bricks</string>
+    <string name="main_menu_button_play">play</string>
+    <string name="main_menu_button_game_service">game services</string>
+    <string name="main_menu_button_about">about</string>
+
+    <!-- LEVEL SELECTION -->
+    <string name="level_selection_title">Select level to play</string>
 </resources>
