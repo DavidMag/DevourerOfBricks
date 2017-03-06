@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.activities.GameActivity;
 import se.davidmagnusson.devourerofbricks.activities.MainMenuActivity;
+import se.davidmagnusson.devourerofbricks.activities.ScoreScreenActivity;
 import se.davidmagnusson.devourerofbricks.database.SQLiteDB;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Ball;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Paddle;
@@ -98,7 +99,7 @@ public class GameView extends SurfaceView implements Runnable {
         //Get the holder and create a new Paint
         ourHolder = getHolder();
         painter = new Paint();
-        painter.setTypeface(Typeface.createFromAsset(this.getContext().getAssets(), "fonts/Gamegirl.ttf"));
+        painter.setTypeface(Typeface.createFromAsset(this.getContext().getAssets(), "fonts/EarlyGameBoy.ttf"));
 
         //Init the hud strings
         timeStr = getResources().getString(R.string.in_game_hud_time);
@@ -114,6 +115,8 @@ public class GameView extends SurfaceView implements Runnable {
         this.levelId = level;
         this.brickLayout = new BrickLayoutGetter().getBrickLayout(level);
         createGameScene();
+
+        Log.i("DoB", ""+levelId);
     }
 
     /**
@@ -361,7 +364,7 @@ public class GameView extends SurfaceView implements Runnable {
         String press = getResources().getString(R.string.in_game_press_to_start);
 
         //Prepare the paint
-        painter.setTextSize(200);
+        painter.setTextSize(100);
         painter.getTextBounds(paused, 0, paused.length(), r);
 
         //Calc the x, y and draw the text
@@ -369,7 +372,7 @@ public class GameView extends SurfaceView implements Runnable {
         float y = cHeight / 2f + r.height() / 2f - r.bottom;
         canvas.drawText(paused, x, y, painter);
         //Just change the size, prepare the bound, recalc the x and draw second text
-        painter.setTextSize(50);
+        painter.setTextSize(25);
         painter.getTextBounds(press, 0, press.length(), r);
         x = cWidth / 2f - r.width() / 2f - r.left;
         canvas.drawText(press, x, y + 150, painter);
@@ -395,17 +398,13 @@ public class GameView extends SurfaceView implements Runnable {
      * @param won if the game won or lost
      */
     private void gameEnded(boolean won) { //TODO
-        Intent intent = new Intent(this.getContext(), MainMenuActivity.class);
+        Intent intent = new Intent(this.getContext(), ScoreScreenActivity.class);
         intent.putExtra("won", won);
         intent.putExtra("time", gameTimeSedonds);
         intent.putExtra("points", points);
         intent.putExtra("life", life);
         intent.putExtra("finalScore", points * (life + levelId / 2) - gameTimeSedonds);
-
-        /*
-        TEMP!!!
-         */
-        new SQLiteDB(getContext()).insertHighscore(levelId, (int) (points * (life + levelId / 2) - gameTimeSedonds), 0);
+        intent.putExtra("level", levelId);
 
         getContext().startActivity(intent);
     }

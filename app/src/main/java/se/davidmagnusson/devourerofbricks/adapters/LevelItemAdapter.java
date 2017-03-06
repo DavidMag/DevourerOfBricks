@@ -51,7 +51,7 @@ public class LevelItemAdapter extends RecyclerView.Adapter<LevelItemAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LevelItemLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot();
-        FontReplacer.setAppFont((ViewGroup) view, Typeface.createFromAsset(view.getContext().getAssets(), "fonts/Gamegirl.ttf"), false);
+        FontReplacer.setAppFont((ViewGroup) view, Typeface.createFromAsset(view.getContext().getAssets(), "fonts/EarlyGameBoy.ttf"), false);
         return new ViewHolder(view);
     }
 

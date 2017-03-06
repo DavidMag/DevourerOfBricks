@@ -16,6 +16,7 @@ import se.davidmagnusson.devourerofbricks.adapters.LevelItemAdapter;
 import se.davidmagnusson.devourerofbricks.database.SQLiteDB;
 import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
 import se.davidmagnusson.devourerofbricks.models.Model;
+import se.davidmagnusson.devourerofbricks.BR;
 
 /**
  * The view model for the Level selection activity.
@@ -62,7 +63,7 @@ public class LevelSelectionViewModel extends BaseObservable{
      */
     private void setTotalHighscore(int totalHighscore) {
         this.totalHighscore = totalHighscore;
-        notifyPropertyChanged(R.id.num_total_highscore);
+        notifyPropertyChanged(BR.totalHighscore);
     }
 
     //</editor-fold>

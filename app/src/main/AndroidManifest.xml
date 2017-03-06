@@ -18,11 +18,17 @@
         </activity>
         <activity android:name=".activities.LevelSelectionActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:noHistory="true"/>
         <activity android:name=".activities.GameActivity"
+            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>
+        <activity android:name=".activities.ScoreScreenActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:noHistory="true"/>
 
 
         <service android:name=".services.MusicPlayerService"

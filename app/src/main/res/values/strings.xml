@@ -23,4 +23,14 @@
     <string name="level_item_high_score">high score: </string>
     <string name="level_item_not_unlocked">Unlocks at: %d</string>
 
+    <!-- SCORE SCREEN -->
+    <string name="score_screen_game_won">GAME WON</string>
+    <string name="score_screen_game_lost">GAME LOST</string>
+    <string name="score_screen_points">points</string>
+    <string name="score_screen_life">life</string>
+    <string name="score_screen_time">time</string>
+    <string name="score_screen_final_score">FINAL SCORE</string>
+    <string name="score_screen_new_highscore">NEW HIGH SCORE</string>
+    <string name="score_screen_button_menu">Main Menu</string>
+    <string name="score_screen_button_play">Play Again</string>
 </resources>

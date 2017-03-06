@@ -33,13 +33,12 @@ public class MainMenuActivity extends Activity {
 
         setContentView(R.layout.main_menu_layout);
 
-        final Typeface mFont = Typeface.createFromAsset(getAssets(), "fonts/Gamegirl.ttf");
+        final Typeface mFont = Typeface.createFromAsset(getAssets(), "fonts/EarlyGameBoy.ttf");
         final ViewGroup mContainer = (ViewGroup) findViewById(android.R.id.content).getRootView();
         FontReplacer.setAppFont(mContainer, mFont, false);
 
         fxPlayer = new FX(this);
 
-        //Since this is the main menu and launcher activity send create intent
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "create");
         intent.putExtra("song", "music/first.mp3");

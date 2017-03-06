@@ -40,7 +40,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             switch (intent.getStringExtra("action")) {
                 case "create":
                     Log.i("DoB", "Create");
-                    onMyCreate(intent.getStringExtra("song"));
+                    if (!ready) {
+                        onMyCreate(intent.getStringExtra("song"));
+                    }
                     break;
                 case "resume":
                     Log.i("DoB", "Resume");
@@ -61,8 +63,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      */
     @Override
     public void onPrepared(MediaPlayer mp) {
-        player.start();
-        ready = true;
+        if (player != null) {
+            player.start();
+            ready = true;
+        }
 
     }
 
@@ -79,7 +83,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (!isInApp) {
+                if (!isInApp && player != null) {
                     player.pause();
                 }
             }
@@ -92,16 +96,18 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      * @param song the song path, example "music/example_song.wav"
      */
     private void onMyCreate(String song){
-        try {
-            AssetFileDescriptor afd = getAssets().openFd(song);
-            player = new MediaPlayer();
-            player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            player.setLooping(true); // Set looping
-            player.setVolume(100,100);
-            player.setOnPreparedListener(this);
-            player.prepareAsync();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!ready) {
+            try {
+                AssetFileDescriptor afd = getAssets().openFd(song);
+                player = new MediaPlayer();
+                player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                player.setLooping(true); // Set looping
+                player.setVolume(100, 100);
+                player.setOnPreparedListener(this);
+                player.prepareAsync();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

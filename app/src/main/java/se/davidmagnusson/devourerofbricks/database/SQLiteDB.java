@@ -3,6 +3,7 @@ package se.davidmagnusson.devourerofbricks.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.databinding.ObservableArrayList;
@@ -124,7 +125,14 @@ public class SQLiteDB extends SQLiteOpenHelper {
     public void insertHighscore(byte level, int highscore, int pending){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("SELECT highscore FROM "+TABLE_ONE+" WHERE levelId="+level, null);
-        int oldHighscore = res.getInt(res.getColumnIndex("highscore"));
+        int oldHighscore = 0;
+        try {
+            if (res.moveToFirst()){
+                oldHighscore = res.getInt(res.getColumnIndex("highscore"));
+            }
+        } catch (CursorIndexOutOfBoundsException ex){
+            ex.printStackTrace();
+        }
 
         if (oldHighscore < highscore) {
             ContentValues values = new ContentValues();
@@ -136,6 +144,23 @@ public class SQLiteDB extends SQLiteOpenHelper {
 
         res.close();
         db.close();
+    }
+
+    /**
+     * Gets the current high score for the specific level
+     * @param levelId the level id
+     * @return the highscore as a int
+     */
+    public int getLevelHighscore(byte levelId){
+        int highscore = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT highscore FROM "+TABLE_ONE+" WHERE levelId="+levelId, null);
+        if (res.moveToFirst()) {
+            highscore = res.getInt(res.getColumnIndex("highscore"));
+        }
+        res.close();
+        db.close();
+        return highscore;
     }
 
     /**

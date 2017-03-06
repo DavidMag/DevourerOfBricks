@@ -59,4 +59,27 @@ public class Model {
     public int getTotalHighscore(){
         return db.getTotalHighscore();
     }
+
+    /**
+     * Fetches a high score from one level
+     * @param levelId the level id for the level we want the high score from
+     * @return the highscore as a int
+     */
+    public int getLevelHighscore(byte levelId){
+        return db.getLevelHighscore(levelId);
+    }
+
+    /**
+     * Sends a new highscore to the game service and the sqlite database
+     * @param levelId which level it is as a byte
+     * @param newHighscore the new high score as a int
+     */
+    public void newHighscore(byte levelId, int newHighscore){
+        int pending = 1;
+        /*
+        TODO SEND TO GAME SERVICE
+         */
+
+        db.insertHighscore(levelId, newHighscore, pending);
+    }
 }
