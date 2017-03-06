@@ -43,9 +43,27 @@ public class BrickLayoutGetter {
     };
 
     private byte[] stageThree = {
-            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
-            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
             BrickFactory.BASIC_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK
+    };
+
+    private byte[] stageFour = {
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK
+    };
+
+    private byte[] stageFive = {
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.BASIC_BRICK,
             BrickFactory.BASIC_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.BASIC_BRICK,
             BrickFactory.BASIC_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.BASIC_BRICK,
             BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK
@@ -64,6 +82,10 @@ public class BrickLayoutGetter {
                 return stageTwo;
             case 3:
                 return stageThree;
+            case 4:
+                return stageFour;
+            case 5:
+                return stageFive;
             default:
                 return null;
         }

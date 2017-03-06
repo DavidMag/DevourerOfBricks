@@ -2,13 +2,17 @@ package se.davidmagnusson.devourerofbricks.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import se.davidmagnusson.devourerofbricks.R;
+import se.davidmagnusson.devourerofbricks.databinding.LevelSelectionLayoutBinding;
 import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
 import se.davidmagnusson.devourerofbricks.services.MusicPlayerService;
+import se.davidmagnusson.devourerofbricks.viewmodels.LevelSelectionViewModel;
 
 /**
  * This is the activity where the player selects which level it wants to play.
@@ -25,7 +29,10 @@ public class LevelSelectionActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.level_selection_layout);
+        LevelSelectionViewModel viewModel = new LevelSelectionViewModel(this);
+        LevelSelectionLayoutBinding binding = DataBindingUtil.setContentView(this, R.layout.level_selection_layout);
+        binding.setViewmodel(viewModel);
+
         FontReplacer.setAppFont((ViewGroup) findViewById(android.R.id.content).getRootView(),
                 Typeface.createFromAsset(getAssets(), "fonts/Gamegirl.ttf"),
                 false);

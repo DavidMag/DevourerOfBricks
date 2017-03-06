@@ -22,7 +22,7 @@ class IndestructibleBrick implements Brick {
     IndestructibleBrick(byte row, byte column, short width, short height){
         byte padding = 2;
 
-        color = Color.argb(255, 23, 100, 23);
+        color = Color.argb(255, 128, 128, 128);
 
         int left = column * width + padding;
         int right = left + width - (padding * 2);

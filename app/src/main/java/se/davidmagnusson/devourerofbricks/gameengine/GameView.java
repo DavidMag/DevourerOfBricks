@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -17,6 +18,8 @@ import java.util.LinkedList;
 
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.activities.GameActivity;
+import se.davidmagnusson.devourerofbricks.activities.MainMenuActivity;
+import se.davidmagnusson.devourerofbricks.database.SQLiteDB;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Ball;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Paddle;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.Brick;
@@ -43,6 +46,7 @@ public class GameView extends SurfaceView implements Runnable {
     private byte life;
     private int points;
     private boolean ballDirectionSwitched;
+    private byte levelId;
     //Time variables
     private long gameTimeStart;
     private long gameTimeMillis;
@@ -94,6 +98,7 @@ public class GameView extends SurfaceView implements Runnable {
         //Get the holder and create a new Paint
         ourHolder = getHolder();
         painter = new Paint();
+        painter.setTypeface(Typeface.createFromAsset(this.getContext().getAssets(), "fonts/Gamegirl.ttf"));
 
         //Init the hud strings
         timeStr = getResources().getString(R.string.in_game_hud_time);
@@ -106,6 +111,7 @@ public class GameView extends SurfaceView implements Runnable {
         bricks = new LinkedList<>();
 
         //create the game scene
+        this.levelId = level;
         this.brickLayout = new BrickLayoutGetter().getBrickLayout(level);
         createGameScene();
     }
@@ -260,7 +266,7 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawRect(0, 0, screenX, (screenY / 10), painter);
             painter.setColor(Color.argb(255, 0, 255, 0)); //GREEN
             painter.setTextAlign(Paint.Align.CENTER);
-            painter.setTextSize(50);
+            painter.setTextSize(30);
             hud = lifeStr +": "+ life +" | "+ pointsStr+": "+ points+ " | "+ timeStr +": "+ gameTimeSedonds;
             canvas.drawText(hud , (screenX / 2), (screenY / 20) + 25, painter);
 
@@ -389,11 +395,18 @@ public class GameView extends SurfaceView implements Runnable {
      * @param won if the game won or lost
      */
     private void gameEnded(boolean won) { //TODO
-        Intent intent = new Intent(this.getContext(), GameActivity.class);
+        Intent intent = new Intent(this.getContext(), MainMenuActivity.class);
         intent.putExtra("won", won);
         intent.putExtra("time", gameTimeSedonds);
         intent.putExtra("points", points);
         intent.putExtra("life", life);
+        intent.putExtra("finalScore", points * (life + levelId / 2) - gameTimeSedonds);
+
+        /*
+        TEMP!!!
+         */
+        new SQLiteDB(getContext()).insertHighscore(levelId, (int) (points * (life + levelId / 2) - gameTimeSedonds), 0);
+
         getContext().startActivity(intent);
     }
 }

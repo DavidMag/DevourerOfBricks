@@ -5,8 +5,10 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.ViewGroup;
 
 import se.davidmagnusson.devourerofbricks.gameengine.GameView;
+import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
 
 /**
  * Here is where the games take place. It uses a own View that extends the SurfaceView class

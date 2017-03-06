@@ -69,25 +69,25 @@
 
         <android.support.constraint.Guideline
             android:layout_width="wrap_content"
-            android:layout_height="592dp"
+            android:layout_height="0dp"
             android:id="@+id/guideline_75"
             android:orientation="vertical"
             tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="290dp"
+            tools:layout_editor_absoluteX="0dp"
             app:layout_constraintGuide_percent="0.7552083" />
 
         <android.support.constraint.Guideline
             android:layout_width="wrap_content"
-            android:layout_height="592dp"
+            android:layout_height="0dp"
             android:id="@+id/guideline_25"
             android:orientation="vertical"
             tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="98dp"
+            tools:layout_editor_absoluteX="0dp"
             app:layout_constraintGuide_percent="0.25520834" />
 
         <Button
             android:text="@string/main_menu_button_game_service"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/main_menu_button_game_services"
             android:layout_marginTop="8dp"
@@ -101,7 +101,7 @@
 
         <Button
             android:text="@string/main_menu_button_about"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/main_menu_button_about"
             android:layout_marginTop="8dp"

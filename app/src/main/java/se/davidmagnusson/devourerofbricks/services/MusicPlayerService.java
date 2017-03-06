@@ -36,21 +36,23 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      * @return returns if it should be sticky or not
      */
     public int onStartCommand(Intent intent, int flags, int startId) {
-        switch (intent.getStringExtra("action")){
-            case "create":
-                Log.i("DoB", "Create");
-                onMyCreate(intent.getStringExtra("song"));
-                break;
-            case "resume":
-                Log.i("DoB", "Resume");
-                onResume();
-                break;
-            case "pause":
-                Log.i("DoB", "Pause");
-                onPause();
-                break;
+        if (intent.getStringExtra("action") != null) {
+            switch (intent.getStringExtra("action")) {
+                case "create":
+                    Log.i("DoB", "Create");
+                    onMyCreate(intent.getStringExtra("song"));
+                    break;
+                case "resume":
+                    Log.i("DoB", "Resume");
+                    onResume();
+                    break;
+                case "pause":
+                    Log.i("DoB", "Pause");
+                    onPause();
+                    break;
+            }
         }
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     /**

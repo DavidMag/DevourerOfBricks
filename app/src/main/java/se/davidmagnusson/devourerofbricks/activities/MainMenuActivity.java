@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -41,7 +42,7 @@ public class MainMenuActivity extends Activity {
         //Since this is the main menu and launcher activity send create intent
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "create");
-        intent.putExtra("song", "music/test.wav");
+        intent.putExtra("song", "music/first.mp3");
         startService(intent);
     }
 

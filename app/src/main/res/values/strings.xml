@@ -18,4 +18,9 @@
 
     <!-- LEVEL SELECTION -->
     <string name="level_selection_title">Select level to play</string>
+    <string name="level_selection_total_highscore">total high score:</string>
+    <string name="level_item_level">level</string>
+    <string name="level_item_high_score">high score: </string>
+    <string name="level_item_not_unlocked">Unlocks at: %d</string>
+
 </resources>
