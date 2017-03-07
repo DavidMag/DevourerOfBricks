@@ -24,6 +24,8 @@ public class Ball {
     private float screenX;
     private float screenY;
 
+    private boolean collision;
+
     /**
      * Class constructor
      * @param screenX the screens X resolution (pixels)
@@ -63,19 +65,23 @@ public class Ball {
      * fps you have.
      * @param fps the current fps
      */
-    public void update(int fps){
+    public boolean update(int fps){
         //Check for wall collision, but not bottom cause you shouldn't bounce there
+        collision = false;
 
         if(fps != 0) {
             if (x + (xSpeed / fps) < 0) { //LEFT WALL
                 invertX();
                 resetX(0);
+                collision = true;
             } else if (x + sideSize + (xSpeed / fps) > screenX) { //RIGHT WALL
                 invertX();
                 resetX((int) screenX - sideSize);
+                collision = true;
             } else if (y + (ySpeed / fps) < (0 + screenY / 10)) { //ROOF
                 invertY();
                 resetY((int) screenY / 10);
+                collision = true;
             } else { //NO HIT, REGULAR MOVEMENT
                 x += (xSpeed / fps);
                 y += (ySpeed / fps);
@@ -86,6 +92,7 @@ public class Ball {
                 ballRect.bottom = y + sideSize;
             }
         }
+        return collision;
     }
 
     /**
@@ -120,20 +127,24 @@ public class Ball {
         if (ballRect.bottom >= brick.bottom){               // 8 (7 9)
             invertY();
             y = (int) brick.bottom + 1;
-            if (ballRect.centerX() < brick.left){           // 7
+            if (ballRect.centerX() < brick.left &&
+                    xSpeed > 0 && ySpeed > 0){              // 7
                 invertX();
                 x = (int) brick.left - sideSize - 1;
-            } else if (ballRect.centerX() > brick.right){   // 9
+            } else if (ballRect.centerX() > brick.right &&
+                    xSpeed < 0 && ySpeed > 0){              // 9
                 invertX();
                 x = (int) brick.right + 1;
             }
         } else if (ballRect.top <= brick.top){              // 2 (1 3)
             invertY();
             y = (int) brick.top - sideSize - 1;
-            if (ballRect.centerX() <= brick.left){          // 1
+            if (ballRect.centerX() <= brick.left &&
+                    xSpeed > 0 && ySpeed < 0){              // 1
                 invertX();
                 x = (int) brick.left - sideSize - 1;
-            } else if (ballRect.centerX() > brick.right){   // 3
+            } else if (ballRect.centerX() > brick.right &&
+                    xSpeed < 0 && ySpeed < 0){              // 3
                 invertX();
                 x = (int) brick.right + 1;
             }
@@ -156,6 +167,11 @@ public class Ball {
      * Inverts the Y speed, used when hits a brick, roof or paddle.
      */
     private void invertY(){
+        if (ySpeed > 0){
+            ySpeed += 4;
+        } else {
+            ySpeed -= 4;
+        }
         ySpeed = (short) -ySpeed;
     }
 

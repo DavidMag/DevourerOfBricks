@@ -39,7 +39,7 @@ public class ScoreScreenViewModel extends BaseObservable {
     private Model model;
 
     //The thread we will use at the counting animation
-    Thread animationThread;
+    private Thread animationThread;
 
     /**
      * The constructor initialises the model and the FX, and then sets the new values with the
@@ -54,7 +54,10 @@ public class ScoreScreenViewModel extends BaseObservable {
      */
     public ScoreScreenViewModel(Context c, int gameTime, int gamePoints, int gameLife, int gameFinalScore, boolean gameWon, byte levelId){
         model = Model.getInstance(c);
-        fx = new FX(c);
+
+        if (FX.sounds == null){
+            FX.initFX(c.getApplicationContext());
+        }
 
 
         this.tempGameFinalScore = gameFinalScore;
@@ -139,7 +142,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * Setter for the gameTime, notifies that the property has changed
      * @param gameTime the new gameTime that will be displayed
      */
-    public void setGameTime(int gameTime) {
+    private void setGameTime(int gameTime) {
         this.gameTime = gameTime;
         notifyPropertyChanged(BR.gameTime);
     }
@@ -148,7 +151,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * Setter for the gamePoints, notifies that the property has changed
      * @param gamePoints the new gamePoints that will be displayed
      */
-    public void setGamePoints(int gamePoints) {
+    private void setGamePoints(int gamePoints) {
         this.gamePoints = gamePoints;
         notifyPropertyChanged(BR.gamePoints);
     }
@@ -157,7 +160,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * Setter for the gameLife, notifies that the property has changed
      * @param gameLife the new gameLife that will be displayed
      */
-    public void setGameLife(int gameLife) {
+    private void setGameLife(int gameLife) {
         this.gameLife = gameLife;
         notifyPropertyChanged(BR.gameLife);
     }
@@ -166,7 +169,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * Setter for the final score, notifies that the property has changed
      * @param gameFinalScore the new final score will be displayed
      */
-    public void setGameFinalScore(int gameFinalScore) {
+    private void setGameFinalScore(int gameFinalScore) {
         this.gameFinalScore = gameFinalScore;
         notifyPropertyChanged(BR.gameFinalScore);
     }
@@ -175,7 +178,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * Setter for the header, notifies that the property has changed
      * @param header the header string, will be displayed
      */
-    public void setHeader(String header) {
+    private void setHeader(String header) {
         this.header = header;
         notifyPropertyChanged(BR.header);
     }
@@ -184,7 +187,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * Setter for the "NEW HIGH SCORE" string, notifies that the property has changed
      * @param newHighscoreString the new String, will be displayed as headline
      */
-    public void setNewHighscoreString(String newHighscoreString) {
+    private void setNewHighscoreString(String newHighscoreString) {
         this.newHighscoreString = newHighscoreString;
         notifyPropertyChanged(BR.newHighscoreString);
     }
@@ -208,29 +211,32 @@ public class ScoreScreenViewModel extends BaseObservable {
                 try {
                     Thread.sleep(600);
                     int tempValue = 0;
-
-                    while (tempValue < gamePoints){
+                    while (tempValue <= gamePoints){
+                        FX.sounds.play(FX.countingPoints, 1, 1, 0, 0, 1);
                         setGamePoints(tempValue++);
                         Thread.sleep(3);
                     }
                     Thread.sleep(300);
 
                     tempValue = 0;
-                    while (tempValue < gameLife){
+                    while (tempValue <= gameLife){
+                        FX.sounds.play(FX.countingPoints, 1, 1, 0, 0, 1);
                         setGameLife(tempValue++);
                         Thread.sleep(5);
                     }
                     Thread.sleep(300);
 
                     tempValue = 0;
-                    while (tempValue < gameTime){
+                    while (tempValue <= gameTime){
+                        FX.sounds.play(FX.countingPoints, 1, 1, 0, 0, 1);
                         setGameTime(tempValue++);
                         Thread.sleep(3);
                     }
                     Thread.sleep(300);
 
                     tempValue = 0;
-                    while (tempValue < gameFinalScore){
+                    while (tempValue <= gameFinalScore){
+                        FX.sounds.play(FX.countingPoints, 1, 1, 0, 0, 1);
                         setGameFinalScore(tempValue++);
                         Thread.sleep(2);
                     }
@@ -242,6 +248,7 @@ public class ScoreScreenViewModel extends BaseObservable {
                     setGameTime(gameTime);
                 } finally {
                     if (gameFinalScore > lastHighscore){
+                        FX.sounds.play(FX.newHighscore, 1, 1, 0, 0, 1);
                         setNewHighscoreString(c.getString(R.string.score_screen_new_highscore));
                         model.newHighscore(levelId, gameFinalScore);
                     }
@@ -257,7 +264,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * @param v the button that got pressed as a view
      */
     public void onMainMenuButtonClick(View v){
-        fx.sounds.play(fx.menuButtonClicked, 1, 1,0, 0, 1);
+        FX.sounds.play(FX.menuButtonClicked, 1, 1,0, 0, 1);
         Intent intent = new Intent(v.getContext(), MainMenuActivity.class);
         v.getContext().startActivity(intent);
     }
@@ -267,7 +274,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * @param v the button that got pressed on as a view
      */
     public void onPlayAgainButtonClicked(View v){
-        fx.sounds.play(fx.menuButtonClicked, 1, 1,0, 0, 1);
+        FX.sounds.play(FX.menuButtonClicked, 1, 1,0, 0, 1);
         Intent intent = new Intent(v.getContext(), LevelSelectionActivity.class);
         v.getContext().startActivity(intent);
     }
@@ -297,6 +304,7 @@ public class ScoreScreenViewModel extends BaseObservable {
             //If this final score was better then the last high score update the high score
             //and show "new high score" text.
             if (tempGameFinalScore > this.lasHighscore){
+                FX.sounds.play(FX.newHighscore, 1, 1, 0, 0, 1);
                 setNewHighscoreString(v.getContext().getString(R.string.score_screen_new_highscore));
                 model.newHighscore(this.levelId, this.gameFinalScore);
             }

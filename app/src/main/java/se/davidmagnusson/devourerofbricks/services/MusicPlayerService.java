@@ -31,8 +31,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      * This method is the one that handles the intent.
      * Either it init a new media player, plays the music or pauses it
      * @param intent the intent that invoked the service
-     * @param flags
-     * @param startId
+     * @param flags if there is any flags on the intent
+     * @param startId startId, if there are multiple intents
      * @return returns if it should be sticky or not
      */
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -102,7 +102,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                 player = new MediaPlayer();
                 player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
                 player.setLooping(true); // Set looping
-                player.setVolume(100, 100);
+                player.setVolume(100,100);
                 player.setOnPreparedListener(this);
                 player.prepareAsync();
             } catch (IOException e) {

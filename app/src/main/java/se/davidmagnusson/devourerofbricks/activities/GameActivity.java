@@ -1,6 +1,7 @@
 package se.davidmagnusson.devourerofbricks.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import se.davidmagnusson.devourerofbricks.gameengine.GameView;
 import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
+import se.davidmagnusson.devourerofbricks.services.MusicPlayerService;
 
 /**
  * Here is where the games take place. It uses a own View that extends the SurfaceView class
@@ -35,6 +37,11 @@ public class GameActivity extends Activity {
 
         gameView = new GameView(this, getIntent().getByteExtra("level", (byte) 1), size.x, size.y);
         setContentView(gameView);
+
+        Intent intent = new Intent(this, MusicPlayerService.class);
+        intent.putExtra("action", "create");
+        intent.putExtra("song", "music/first.mp3"); //TODO change song
+        startService(intent);
     }
 
     /**
@@ -44,6 +51,9 @@ public class GameActivity extends Activity {
     protected void onResume() {
         super.onResume();
         gameView.onResume();
+        Intent intent = new Intent(this, MusicPlayerService.class);
+        intent.putExtra("action", "resume");
+        startService(intent);
     }
 
     /**
@@ -53,5 +63,8 @@ public class GameActivity extends Activity {
     protected void onPause() {
         super.onPause();
         gameView.onPause();
+        Intent intent = new Intent(this, MusicPlayerService.class);
+        intent.putExtra("action", "pause");
+        startService(intent);
     }
 }

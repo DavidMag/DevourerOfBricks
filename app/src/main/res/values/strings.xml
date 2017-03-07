@@ -33,4 +33,16 @@
     <string name="score_screen_new_highscore">NEW HIGH SCORE</string>
     <string name="score_screen_button_menu">Main Menu</string>
     <string name="score_screen_button_play">Play Again</string>
+
+    <!-- LOADING SCREEN -->
+    <string name="loading_screen_loading">LOADING</string>
+    <string name="loading_screen_press_to_play">Press to play</string>
+    <string-array name="loading_screen_tips">
+        <item>Fetching malware</item>
+        <item>Loading the bricks from another dimension</item>
+        <item>We\'re ready when you\'re (or not)</item>
+        <item>You should really not be playing this game</item>
+        <item>Don\'t you have anything better to do?</item>
+        <item>The game is traveling through time and space just to be with you</item>
+    </string-array>
 </resources>

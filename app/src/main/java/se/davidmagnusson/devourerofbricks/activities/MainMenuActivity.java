@@ -19,9 +19,6 @@ import se.davidmagnusson.devourerofbricks.services.MusicPlayerService;
  */
 public class MainMenuActivity extends Activity {
 
-    //Used to play sounds with
-    FX fxPlayer;
-
     /**
      * This is the onCreate method that android uses when this activity is building,
      * also inits the music player
@@ -33,11 +30,11 @@ public class MainMenuActivity extends Activity {
 
         setContentView(R.layout.main_menu_layout);
 
+        FX.initFX(this.getApplication().getApplicationContext());
+
         final Typeface mFont = Typeface.createFromAsset(getAssets(), "fonts/EarlyGameBoy.ttf");
         final ViewGroup mContainer = (ViewGroup) findViewById(android.R.id.content).getRootView();
         FontReplacer.setAppFont(mContainer, mFont, false);
-
-        fxPlayer = new FX(this);
 
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "create");
@@ -74,7 +71,7 @@ public class MainMenuActivity extends Activity {
      * @param v the view that was pressed, auto sent by android
      */
     public void playButtonClicked(View v){
-        fxPlayer.sounds.play(fxPlayer.menuButtonClicked, 1, 1, 0, 0, 1);
+        FX.sounds.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
         Intent intent = new Intent(this, LevelSelectionActivity.class);
         startActivity(intent);
     }

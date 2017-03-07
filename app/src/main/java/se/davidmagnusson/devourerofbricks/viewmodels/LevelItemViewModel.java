@@ -8,18 +8,20 @@ import android.widget.ImageView;
 
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.activities.GameActivity;
+import se.davidmagnusson.devourerofbricks.activities.LoadingScreenActivity;
+import se.davidmagnusson.devourerofbricks.helpers.FX;
 
 /**
  * The view model for the items in the recycle view in the level selection menu.
  */
 public class LevelItemViewModel {
 
-    public byte levelId;
-    public int highscore;
-    public String highscoreString;
-    public int imgId;
+    private byte levelId;
+    private int highscore;
+    private String highscoreString;
+    private int imgId;
     public int minHighscore;
-    public boolean unlocked;
+    private boolean unlocked;
     public int pending;
 
     /**
@@ -42,6 +44,10 @@ public class LevelItemViewModel {
         this.highscore = highscore;
         this.levelId = levelId;
         this.minHighscore = minHighscore;
+
+        if (FX.sounds == null){
+            FX.initFX(c.getApplicationContext());
+        }
     }
 
     //<editor-fold desc="GETTERS AND SETTERS">
@@ -94,11 +100,12 @@ public class LevelItemViewModel {
 
 
     /**
-     * The on click method sends a intent to the game activity class with info about which level
+     * The on click method sends a intent to the loading screen activity class with info about which level
      * @param view the view that got pressed
      */
     public void onClick(View view){
-        Intent intent = new Intent(view.getContext(), GameActivity.class);
+        FX.sounds.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
+        Intent intent = new Intent(view.getContext(), LoadingScreenActivity.class);
         intent.putExtra("level", levelId);
         view.getContext().startActivity(intent);
     }

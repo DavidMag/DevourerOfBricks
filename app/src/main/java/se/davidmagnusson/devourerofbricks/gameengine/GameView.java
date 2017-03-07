@@ -26,6 +26,7 @@ import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Paddle;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.Brick;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.BrickFactory;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.BrickLayoutGetter;
+import se.davidmagnusson.devourerofbricks.helpers.FX;
 
 /**
  * This class is where the game runs, it extends the SurfaceView class and
@@ -36,6 +37,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     //The thread the game will be running on
     private Thread gameThread = null;
+
 
     //The Game Objects
     private Paddle paddle;
@@ -91,6 +93,10 @@ public class GameView extends SurfaceView implements Runnable {
     public GameView(Context context, byte level, float screenX, float screenY){
         //Let the original SurfaceView do some magic in the constructor
         super(context);
+
+        if (FX.sounds == null){
+            FX.initFX(context.getApplicationContext());
+        }
 
         //Save the screens resolution
         this.screenX = screenX;
@@ -150,7 +156,7 @@ public class GameView extends SurfaceView implements Runnable {
     /**
      * It's here the scene is built, the ball is reset to start position, the bricks are generated
      */
-    private void createGameScene(){ //TODO
+    private void createGameScene(){
 
         //Init some game variables
         life = 3;
@@ -189,25 +195,30 @@ public class GameView extends SurfaceView implements Runnable {
 
         //Update the game objects
         paddle.update(fps);
-        ball.update(fps);
+        if (ball.update(fps)){
+            FX.sounds.play(FX.hardBrick, 1, 1, 0, 0, 1);
+        }
 
         //Check if ball and paddle collides
         if (RectF.intersects(ball.getRect(), paddle.getRect())){
             ball.paddleHit(paddle.getRect());
+            FX.sounds.play(FX.hardBrick, 1, 1, 0, 0, 1);
         }
 
         ballDirectionSwitched = false;
         for (Iterator<Brick> iterator = bricks.iterator(); iterator.hasNext();){
             Brick brick = iterator.next();
             if (brick != null) {
-                if (RectF.intersects(brick.getRect(), ball.getRect())) {
-                    if (!ballDirectionSwitched) {
-                        ball.brickCollision(brick.getRect());
-                        ballDirectionSwitched = true;
-                    }
+                if (RectF.intersects(brick.getRect(), ball.getRect()) && !ballDirectionSwitched) {
+                    ball.brickCollision(brick.getRect());
+                    ballDirectionSwitched = true;
+
                     if (brick.gotHit()) {
+                        FX.sounds.play(FX.brickCollision, 1, 1, 0, 0, 1);
                         points += 10;
                         iterator.remove();
+                    } else {
+                        FX.sounds.play(FX.hardBrick, 1, 1, 0, 0, 1);
                     }
                 }
             }
@@ -215,6 +226,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         //if ball hits floor
         if (ball.getRect().bottom > screenY){
+            FX.sounds.play(FX.ballCrash, 1, 1, 0, 0, 1);
             if (--life == 0){
                 gameEnded(false);
             } else {
@@ -270,7 +282,7 @@ public class GameView extends SurfaceView implements Runnable {
             painter.setColor(Color.argb(255, 0, 255, 0)); //GREEN
             painter.setTextAlign(Paint.Align.CENTER);
             painter.setTextSize(30);
-            hud = lifeStr +": "+ life +" | "+ pointsStr+": "+ points+ " | "+ timeStr +": "+ gameTimeSedonds;
+            hud = lifeStr +": "+ life +" - "+ pointsStr+": "+ points+ " - "+ timeStr +": "+ gameTimeSedonds;
             canvas.drawText(hud , (screenX / 2), (screenY / 20) + 25, painter);
 
             //PAUSE
@@ -397,7 +409,7 @@ public class GameView extends SurfaceView implements Runnable {
      * with info about the game in the intent.
      * @param won if the game won or lost
      */
-    private void gameEnded(boolean won) { //TODO
+    private void gameEnded(boolean won) {
         Intent intent = new Intent(this.getContext(), ScoreScreenActivity.class);
         intent.putExtra("won", won);
         intent.putExtra("time", gameTimeSedonds);

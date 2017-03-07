@@ -29,6 +29,9 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:noHistory="true"/>
+        <activity android:name=".activities.LoadingScreenActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
 
 
         <service android:name=".services.MusicPlayerService"
