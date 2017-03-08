@@ -48,7 +48,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     if (!ready) {
                         currentSong = intent.getStringExtra("song");
                         onMyCreate(currentSong);
-                    } else if (!currentSong.equals(intent.getStringExtra("song"))){
+                    } else if (currentSong != null && !currentSong.equals(intent.getStringExtra("song"))){
                         onDestroy();
                         currentSong = intent.getStringExtra("song");
                         onMyCreate(currentSong);
