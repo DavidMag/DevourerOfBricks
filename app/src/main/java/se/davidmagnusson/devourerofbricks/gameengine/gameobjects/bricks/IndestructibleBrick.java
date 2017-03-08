@@ -20,7 +20,7 @@ class IndestructibleBrick implements Brick {
      * @param height
      */
     IndestructibleBrick(byte row, byte column, short width, short height){
-        byte padding = 2;
+        byte padding = 4;
 
         color = Color.argb(255, 128, 128, 128);
 

@@ -40,9 +40,18 @@
     <string-array name="loading_screen_tips">
         <item>Fetching malware</item>
         <item>Loading the bricks from another dimension</item>
-        <item>We\'re ready when you\'re (or not)</item>
+        <item>We are ready when you are, or not...</item>
         <item>You should really not be playing this game</item>
         <item>Don\'t you have anything better to do?</item>
         <item>The game is traveling through time and space just to be with you</item>
+        <item>Always remember that everything on the internet is true</item>
+        <item>How can "less be more" when more is more?</item>
+        <item>Are you ready for this?</item>
+        <item>This game is so good I shit bricks</item>
+        <item>When life knocks you down, you better buckle up because it ain\'t getting better</item>
+        <item>A pun is the lowest form of humor... Unless you thought of it yourself</item>
+        <item>No sense in being pessimistic, it wouldn\'t work anyway</item>
+        <item>I\'m quitting my job to pursue anxiety full-time</item>
+        <item>Kepp calm an... Oh shit was that exam tomorrow</item>
     </string-array>
 </resources>

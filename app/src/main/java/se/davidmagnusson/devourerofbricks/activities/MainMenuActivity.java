@@ -71,7 +71,7 @@ public class MainMenuActivity extends Activity {
      * @param v the view that was pressed, auto sent by android
      */
     public void playButtonClicked(View v){
-        FX.sounds.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
+        FX.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
         Intent intent = new Intent(this, LevelSelectionActivity.class);
         startActivity(intent);
     }

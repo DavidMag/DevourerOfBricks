@@ -22,7 +22,7 @@ class TwoLifeBrick implements Brick {
      * @param height
      */
     TwoLifeBrick(byte row, byte column, short width, short height){
-        byte padding = 2;
+        byte padding = 4;
 
         color = Color.argb(255, 0, 150, 0);
         lifes = 2;

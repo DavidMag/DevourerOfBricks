@@ -55,10 +55,7 @@ public class ScoreScreenViewModel extends BaseObservable {
     public ScoreScreenViewModel(Context c, int gameTime, int gamePoints, int gameLife, int gameFinalScore, boolean gameWon, byte levelId){
         model = Model.getInstance(c);
 
-        if (FX.sounds == null){
-            FX.initFX(c.getApplicationContext());
-        }
-
+        FX.initFX(c.getApplicationContext());
 
         this.tempGameFinalScore = gameFinalScore;
         this.tempGamePoints = gamePoints;
@@ -212,7 +209,7 @@ public class ScoreScreenViewModel extends BaseObservable {
                     Thread.sleep(600);
                     int tempValue = 0;
                     while (tempValue <= gamePoints){
-                        FX.sounds.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                        FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
                         setGamePoints(tempValue++);
                         Thread.sleep(3);
                     }
@@ -220,7 +217,7 @@ public class ScoreScreenViewModel extends BaseObservable {
 
                     tempValue = 0;
                     while (tempValue <= gameLife){
-                        FX.sounds.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                        FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
                         setGameLife(tempValue++);
                         Thread.sleep(5);
                     }
@@ -228,7 +225,7 @@ public class ScoreScreenViewModel extends BaseObservable {
 
                     tempValue = 0;
                     while (tempValue <= gameTime){
-                        FX.sounds.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                        FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
                         setGameTime(tempValue++);
                         Thread.sleep(3);
                     }
@@ -236,7 +233,7 @@ public class ScoreScreenViewModel extends BaseObservable {
 
                     tempValue = 0;
                     while (tempValue <= gameFinalScore){
-                        FX.sounds.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                        FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
                         setGameFinalScore(tempValue++);
                         Thread.sleep(2);
                     }
@@ -248,7 +245,7 @@ public class ScoreScreenViewModel extends BaseObservable {
                     setGameTime(gameTime);
                 } finally {
                     if (gameFinalScore > lastHighscore){
-                        FX.sounds.play(FX.newHighscore, 1, 1, 0, 0, 1);
+                        FX.play(FX.newHighscore, 1, 1, 0, 0, 1);
                         setNewHighscoreString(c.getString(R.string.score_screen_new_highscore));
                         model.newHighscore(levelId, gameFinalScore);
                     }
@@ -264,7 +261,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * @param v the button that got pressed as a view
      */
     public void onMainMenuButtonClick(View v){
-        FX.sounds.play(FX.menuButtonClicked, 1, 1,0, 0, 1);
+        FX.play(FX.menuButtonClicked, 1, 1,0, 0, 1);
         Intent intent = new Intent(v.getContext(), MainMenuActivity.class);
         v.getContext().startActivity(intent);
     }
@@ -274,7 +271,7 @@ public class ScoreScreenViewModel extends BaseObservable {
      * @param v the button that got pressed on as a view
      */
     public void onPlayAgainButtonClicked(View v){
-        FX.sounds.play(FX.menuButtonClicked, 1, 1,0, 0, 1);
+        FX.play(FX.menuButtonClicked, 1, 1,0, 0, 1);
         Intent intent = new Intent(v.getContext(), LevelSelectionActivity.class);
         v.getContext().startActivity(intent);
     }
@@ -304,7 +301,7 @@ public class ScoreScreenViewModel extends BaseObservable {
             //If this final score was better then the last high score update the high score
             //and show "new high score" text.
             if (tempGameFinalScore > this.lasHighscore){
-                FX.sounds.play(FX.newHighscore, 1, 1, 0, 0, 1);
+                FX.play(FX.newHighscore, 1, 1, 0, 0, 1);
                 setNewHighscoreString(v.getContext().getString(R.string.score_screen_new_highscore));
                 model.newHighscore(this.levelId, this.gameFinalScore);
             }

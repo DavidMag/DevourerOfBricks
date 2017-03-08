@@ -21,7 +21,7 @@ class BasicBrick implements Brick {
      * @param height the height of the brick, measured in pixels
      */
     BasicBrick(byte row, byte column, short width, short height){
-        byte padding = 2;
+        byte padding = 4;
 
         color = Color.argb(255, 0, 255, 0);
 

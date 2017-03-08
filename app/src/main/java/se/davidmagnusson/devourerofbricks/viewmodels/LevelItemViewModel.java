@@ -45,9 +45,8 @@ public class LevelItemViewModel {
         this.levelId = levelId;
         this.minHighscore = minHighscore;
 
-        if (FX.sounds == null){
-            FX.initFX(c.getApplicationContext());
-        }
+        FX.initFX(c.getApplicationContext());
+
     }
 
     //<editor-fold desc="GETTERS AND SETTERS">
@@ -104,7 +103,7 @@ public class LevelItemViewModel {
      * @param view the view that got pressed
      */
     public void onClick(View view){
-        FX.sounds.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
+        FX.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
         Intent intent = new Intent(view.getContext(), LoadingScreenActivity.class);
         intent.putExtra("level", levelId);
         view.getContext().startActivity(intent);

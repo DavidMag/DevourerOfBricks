@@ -94,9 +94,7 @@ public class GameView extends SurfaceView implements Runnable {
         //Let the original SurfaceView do some magic in the constructor
         super(context);
 
-        if (FX.sounds == null){
-            FX.initFX(context.getApplicationContext());
-        }
+        FX.initFX(context.getApplicationContext());
 
         //Save the screens resolution
         this.screenX = screenX;
@@ -196,13 +194,13 @@ public class GameView extends SurfaceView implements Runnable {
         //Update the game objects
         paddle.update(fps);
         if (ball.update(fps)){
-            FX.sounds.play(FX.hardBrick, 1, 1, 0, 0, 1);
+            FX.play(FX.hardBrick, 1, 1, 0, 0, 1);
         }
 
         //Check if ball and paddle collides
         if (RectF.intersects(ball.getRect(), paddle.getRect())){
             ball.paddleHit(paddle.getRect());
-            FX.sounds.play(FX.hardBrick, 1, 1, 0, 0, 1);
+            FX.play(FX.hardBrick, 1, 1, 0, 0, 1);
         }
 
         ballDirectionSwitched = false;
@@ -214,11 +212,11 @@ public class GameView extends SurfaceView implements Runnable {
                     ballDirectionSwitched = true;
 
                     if (brick.gotHit()) {
-                        FX.sounds.play(FX.brickCollision, 1, 1, 0, 0, 1);
+                        FX.play(FX.brickCollision, 1, 1, 0, 0, 1);
                         points += 10;
                         iterator.remove();
                     } else {
-                        FX.sounds.play(FX.hardBrick, 1, 1, 0, 0, 1);
+                        FX.play(FX.hardBrick, 1, 1, 0, 0, 1);
                     }
                 }
             }
@@ -226,7 +224,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         //if ball hits floor
         if (ball.getRect().bottom > screenY){
-            FX.sounds.play(FX.ballCrash, 1, 1, 0, 0, 1);
+            FX.play(FX.ballCrash, 1, 1, 0, 0, 1);
             if (--life == 0){
                 gameEnded(false);
             } else {

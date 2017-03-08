@@ -165,7 +165,7 @@ public class LoadingScreenActivity extends Activity {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FX.sounds.play(FX.pressStart, 1, 1, 0, 0, 1);
+                    FX.play(FX.pressStart, 1, 1, 0, 0, 1);
                     Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                     intent.putExtra("level", getIntent().getByteExtra("level", (byte) 1));
                     startActivity(intent);
