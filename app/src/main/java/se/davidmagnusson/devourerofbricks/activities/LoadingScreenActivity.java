@@ -32,8 +32,6 @@ public class LoadingScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FX.initFX(getApplicationContext());
-
         //Setting the layout
         setContentView(R.layout.loading_screen_layout);
         //Replacing the typeface
@@ -89,6 +87,24 @@ public class LoadingScreenActivity extends Activity {
         });
 
         loadingDotsThread.start();
+    }
+
+    /**
+     * Inits the FX
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FX.initFX(getApplicationContext());
+    }
+
+    /**
+     * Stops the FX
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FX.releaseSound();
     }
 
     /**

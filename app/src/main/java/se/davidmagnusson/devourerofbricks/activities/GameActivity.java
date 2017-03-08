@@ -9,6 +9,7 @@ import android.view.Display;
 import android.view.ViewGroup;
 
 import se.davidmagnusson.devourerofbricks.gameengine.GameView;
+import se.davidmagnusson.devourerofbricks.helpers.FX;
 import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
 import se.davidmagnusson.devourerofbricks.services.MusicPlayerService;
 
@@ -40,29 +41,31 @@ public class GameActivity extends Activity {
 
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "create");
-        intent.putExtra("song", "music/first.mp3"); //TODO change song
+        intent.putExtra("song", "music/ingame.mp3"); //TODO change song
         startService(intent);
     }
 
     /**
-     * Same as super just added a call to the gameViews onResume
+     * Same as super just added a call to the gameViews onResume and starts the music and fx
      */
     @Override
     protected void onResume() {
         super.onResume();
         gameView.onResume();
+        FX.initFX(getApplicationContext());
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "resume");
         startService(intent);
     }
 
     /**
-     * Same as super just added a call to the gameViews onPause
+     * Same as super just added a call to the gameViews onPause and pauses fx and music
      */
     @Override
     protected void onPause() {
         super.onPause();
         gameView.onPause();
+        FX.releaseSound();
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "pause");
         startService(intent);

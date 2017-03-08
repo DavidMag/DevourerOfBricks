@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.databinding.ScoreScreenLayoutBinding;
+import se.davidmagnusson.devourerofbricks.helpers.FX;
 import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
 import se.davidmagnusson.devourerofbricks.services.MusicPlayerService;
 import se.davidmagnusson.devourerofbricks.viewmodels.ScoreScreenViewModel;
@@ -54,22 +55,24 @@ public class ScoreScreenActivity extends Activity {
     }
 
     /**
-     * Auto called by android when the activity gets focus again, starts the music again
+     * Auto called by android when the activity gets focus again, starts the music again and FX
      */
     @Override
     protected void onResume() {
         super.onResume();
+        FX.initFX(getApplicationContext());
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "resume");
         startService(intent);
     }
 
     /**
-     * Auto called by android when activity loses focus, pauses the music
+     * Auto called by android when activity loses focus, pauses the music and FX
      */
     @Override
     protected void onPause() {
         super.onPause();
+        FX.releaseSound();
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "pause");
         startService(intent);

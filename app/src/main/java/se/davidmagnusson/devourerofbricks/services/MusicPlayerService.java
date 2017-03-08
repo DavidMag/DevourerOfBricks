@@ -3,10 +3,12 @@ package se.davidmagnusson.devourerofbricks.services;
 import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.IOException;
@@ -22,6 +24,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private boolean ready = false;
     //Needs to be volatile because it's accessed from different threads
     private volatile boolean isInApp;
+    private String currentSong;
 
     public IBinder onBind(Intent arg0) {
         return null;
@@ -36,12 +39,19 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      * @return returns if it should be sticky or not
      */
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getStringExtra("action") != null) {
+        SharedPreferences prefReader = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (intent.getStringExtra("action") != null && prefReader.getBoolean("music", true)) {
             switch (intent.getStringExtra("action")) {
                 case "create":
                     Log.i("DoB", "Create");
                     if (!ready) {
-                        onMyCreate(intent.getStringExtra("song"));
+                        currentSong = intent.getStringExtra("song");
+                        onMyCreate(currentSong);
+                    } else if (!currentSong.equals(intent.getStringExtra("song"))){
+                        onDestroy();
+                        currentSong = intent.getStringExtra("song");
+                        onMyCreate(currentSong);
                     }
                     break;
                 case "resume":
@@ -52,6 +62,21 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     Log.i("DoB", "Pause");
                     onPause();
                     break;
+            }
+        }
+        if (intent.getBooleanExtra("changedPref", false)){
+
+            if (prefReader.getBoolean("music", true)){
+                if (!ready) {
+                    onMyCreate(intent.getStringExtra("song"));
+                }
+            } else {
+                if (ready) {
+                    player.stop();
+                    player.release();
+                    player = null;
+                    ready = false;
+                }
             }
         }
         return START_NOT_STICKY;
@@ -130,6 +155,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         if (player != null) {
             player.stop();
             player.release();
+            player = null;
+            ready = false;
         }
     }
 }

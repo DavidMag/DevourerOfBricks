@@ -127,7 +127,8 @@
             android:layout_marginStart="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             android:visibility="visible"
-            style="@android:style/Widget.ImageButton" />
+            style="@android:style/Widget.ImageButton"
+            android:onClick="soundButtonPressed"/>
 
         <ImageButton
             app:srcCompat="@raw/music_on"
@@ -141,7 +142,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/image_button_sound"
             android:layout_marginStart="16dp"
             android:visibility="visible"
-            android:layout_height="24dp" />
+            android:layout_height="24dp"
+            android:onClick="musicButtonPressed" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

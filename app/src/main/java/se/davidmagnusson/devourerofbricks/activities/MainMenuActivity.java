@@ -2,11 +2,15 @@ package se.davidmagnusson.devourerofbricks.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.renderscript.Allocation;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.helpers.FX;
@@ -30,7 +34,7 @@ public class MainMenuActivity extends Activity {
 
         setContentView(R.layout.main_menu_layout);
 
-        FX.initFX(this.getApplication().getApplicationContext());
+        checkPreferenceIcon();
 
         final Typeface mFont = Typeface.createFromAsset(getAssets(), "fonts/EarlyGameBoy.ttf");
         final ViewGroup mContainer = (ViewGroup) findViewById(android.R.id.content).getRootView();
@@ -43,26 +47,45 @@ public class MainMenuActivity extends Activity {
     }
 
     /**
-     * This is auto called by android when it's resumed, starts the music again
+     * This is auto called by android when it's resumed, starts the music again and fx
      */
     @Override
     protected void onResume() {
         super.onResume();
+        FX.initFX(this.getApplication().getApplicationContext());
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "resume");
         startService(intent);
     }
 
     /**
-     * This is auto called by android when it's paused, pauses the music
+     * This is auto called by android when it's paused, pauses the music and fx
      */
     @Override
     protected void onPause() {
         super.onPause();
+        FX.releaseSound();
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "pause");
         startService(intent);
 
+    }
+
+    /**
+     * Called on create to check which preference icon the sound and music buttons should have
+     */
+    private void checkPreferenceIcon() {
+        ImageButton sound = (ImageButton) findViewById(R.id.image_button_sound);
+        ImageButton music = (ImageButton) findViewById(R.id.image_button_music);
+        SharedPreferences prefReader = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (!prefReader.getBoolean("music", true)){
+            music.setImageResource(+ R.raw.music_off);
+        }
+
+        if (!prefReader.getBoolean("sound", true)){
+            sound.setImageResource(+ R.raw.sound_off);
+        }
     }
 
     /**
@@ -74,5 +97,59 @@ public class MainMenuActivity extends Activity {
         FX.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
         Intent intent = new Intent(this, LevelSelectionActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * onClick method for the music on/off switch, tells the music player whatever the player
+     * wants music or not and changes icon
+     * @param v the view that got pressed
+     */
+    public void musicButtonPressed(View v){
+        SharedPreferences preferenceReader = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor preferenceEditor = preferenceReader.edit();
+        boolean music = preferenceReader.getBoolean("music", true);
+        ImageButton button = (ImageButton) v;
+
+        //Change the button image
+        if (music){
+            button.setImageResource(+ R.raw.music_off);
+        } else {
+            button.setImageResource(+ R.raw.music_on);
+        }
+
+        //Change the preference
+        preferenceEditor.putBoolean("music", !music);
+        preferenceEditor.commit();
+
+        //Send intent to music player
+        Intent intent = new Intent(this, MusicPlayerService.class);
+        intent.putExtra("changedPref", true);
+        intent.putExtra("song", "music/first.mp3");
+        startService(intent);
+    }
+
+    /**
+     * onClick method for the sound on/off switch, tells the FX whatever the player
+     * wants FX or not and changes icon
+     * @param v the view that got pressed
+     */
+    public void soundButtonPressed(View v){
+        SharedPreferences preferenceReader = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor preferenceEditor = preferenceReader.edit();
+        boolean sound = preferenceReader.getBoolean("sound", true);
+        ImageButton button = (ImageButton) v;
+
+        //Change the button image
+        if (sound){
+            button.setImageResource(+ R.raw.sound_off);
+        } else {
+            button.setImageResource(+ R.raw.sound_on);
+        }
+
+        //Change the preference
+        preferenceEditor.putBoolean("sound", !sound);
+        preferenceEditor.commit();
+
+        FX.changedPref(!sound, this.getApplicationContext());
     }
 }

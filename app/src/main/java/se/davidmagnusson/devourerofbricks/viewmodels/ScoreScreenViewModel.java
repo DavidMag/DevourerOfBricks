@@ -55,8 +55,6 @@ public class ScoreScreenViewModel extends BaseObservable {
     public ScoreScreenViewModel(Context c, int gameTime, int gamePoints, int gameLife, int gameFinalScore, boolean gameWon, byte levelId){
         model = Model.getInstance(c);
 
-        FX.initFX(c.getApplicationContext());
-
         this.tempGameFinalScore = gameFinalScore;
         this.tempGamePoints = gamePoints;
         this.tempGameTime = gameTime;
@@ -208,8 +206,9 @@ public class ScoreScreenViewModel extends BaseObservable {
                 try {
                     Thread.sleep(600);
                     int tempValue = 0;
+                    float volume = (float) 0.3;
                     while (tempValue <= gamePoints){
-                        FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                        FX.play(FX.countingPoints, volume, volume, 0, 0, 1);
                         setGamePoints(tempValue++);
                         Thread.sleep(3);
                     }
@@ -217,7 +216,7 @@ public class ScoreScreenViewModel extends BaseObservable {
 
                     tempValue = 0;
                     while (tempValue <= gameLife){
-                        FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                        FX.play(FX.countingPoints, volume, volume, 0, 0, 1);
                         setGameLife(tempValue++);
                         Thread.sleep(5);
                     }
@@ -225,7 +224,7 @@ public class ScoreScreenViewModel extends BaseObservable {
 
                     tempValue = 0;
                     while (tempValue <= gameTime){
-                        FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                        FX.play(FX.countingPoints, volume, volume, 0, 0, 1);
                         setGameTime(tempValue++);
                         Thread.sleep(3);
                     }
@@ -233,7 +232,7 @@ public class ScoreScreenViewModel extends BaseObservable {
 
                     tempValue = 0;
                     while (tempValue <= gameFinalScore){
-                        FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                        FX.play(FX.countingPoints, volume, volume, 0, 0, 1);
                         setGameFinalScore(tempValue++);
                         Thread.sleep(2);
                     }

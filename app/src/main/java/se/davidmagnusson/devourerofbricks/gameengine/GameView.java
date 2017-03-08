@@ -94,8 +94,6 @@ public class GameView extends SurfaceView implements Runnable {
         //Let the original SurfaceView do some magic in the constructor
         super(context);
 
-        FX.initFX(context.getApplicationContext());
-
         //Save the screens resolution
         this.screenX = screenX;
         this.screenY = screenY;

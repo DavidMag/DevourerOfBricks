@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.databinding.LevelSelectionLayoutBinding;
+import se.davidmagnusson.devourerofbricks.helpers.FX;
 import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
 import se.davidmagnusson.devourerofbricks.services.MusicPlayerService;
 import se.davidmagnusson.devourerofbricks.viewmodels.LevelSelectionViewModel;
@@ -57,11 +58,13 @@ public class LevelSelectionActivity extends Activity {
 
     /**
      * This method is auto called by android when something interrupts the application (the user
-     * press the home button, a text message...), this pauses the music.
+     * press the home button, a text message...), this pauses the music, and tells the FX that
+     * this activity is shutting down
      */
     @Override
     protected void onPause() {
         super.onPause();
+        FX.releaseSound();
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "pause");
         startService(intent);

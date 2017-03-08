@@ -1,12 +1,14 @@
 package se.davidmagnusson.devourerofbricks.helpers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.IOException;
@@ -34,6 +36,7 @@ public class FX {
     public static int pressStart;
 
     private static boolean ready = false;
+    private static boolean isInApp;
 
 
     /**
@@ -47,7 +50,9 @@ public class FX {
      * @param context the context uesd, should be application context not activity
      */
     public static void initFX(Context context){
-        if (!ready) {
+        isInApp = true;
+        SharedPreferences prefReader = PreferenceManager.getDefaultSharedPreferences(context);
+        if (!ready && prefReader.getBoolean("sound", true)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 AudioAttributes aa = new AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_GAME)
@@ -118,8 +123,51 @@ public class FX {
      * @param rate how fast it should be played, between 0.5 and 2.5
      */
     public static void play(int soundId, float leftVolume, float rightVolume, int priority, int loop, float rate){
-        if (ready && soundId != 0){
+        if (ready && soundId != 0 && sounds != null){
             sounds.play(soundId, leftVolume, rightVolume, priority, loop, rate);
         }
+    }
+
+    /**
+     * Called when the player has changed the sound preferences
+     * @param pref if the player wants sound or not, as a boolean
+     * @param c the application context
+     */
+    public static void changedPref(boolean pref, Context c) {
+        if (pref){
+            FX.initFX(c);
+        } else {
+            if (sounds != null && ready) {
+                sounds.release();
+                sounds = null;
+                ready = false;
+            }
+        }
+    }
+
+    /**
+     * Releases the sound pool and sets it to null after a small "still in app" check
+     */
+    public static void releaseSound(){
+        isInApp = false;
+        Thread releaseThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (isInApp == false){
+                    if (sounds != null && ready) {
+                        sounds.release();
+                        sounds = null;
+                        ready = false;
+                    }
+                }
+            }
+        });
+        releaseThread.start();
+
     }
 }
