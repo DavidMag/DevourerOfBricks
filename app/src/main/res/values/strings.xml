@@ -7,6 +7,11 @@
     <string name="in_game_hud_time">TIME</string>
     <string name="in_game_hud_points">POINTS</string>
     <string name="in_game_hud_lifes">LIFE</string>
+    <string name="in_game_warning">If you leave this game won\'t be saved, are you sure you want to leave?</string>
+    <string name="in_game_power_bigger_paddle">Bigger paddle, 20 sec</string>
+    <string name="in_game_power_smaller_paddle">Smaller paddle, 20 sec</string>
+    <string name="in_game_power_double_points">Double points 20 sec</string>
+    <string name="in_game_power_life">&lt;</string>
 
     <!-- MAIN MENU -->
     <string name="main_menu_app_name_devourer">devourer</string>
@@ -52,8 +57,9 @@
         <item>A pun is the lowest form of humor... Unless you thought of it yourself</item>
         <item>No sense in being pessimistic, it wouldn\'t work anyway</item>
         <item>I\'m quitting my job to pursue anxiety full-time</item>
-        <item>Kepp calm an... Oh shit was that exam tomorrow</item>
-        <item>Sunny D and Rum (yum ...yum)</item>
+        <item>Keep calm an... Oh shit was that exam tomorrow</item>
+        <item>Sunny D and Rum, yum ...yum</item>
         <item>No matter how tempting it might may be, never watch youtube poop!</item>
+        <item>&lt;</item>
     </string-array>
 </resources>

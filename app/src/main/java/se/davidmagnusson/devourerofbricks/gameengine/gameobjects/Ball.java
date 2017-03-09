@@ -35,7 +35,7 @@ public class Ball {
         this.screenX = screenX;
         this.screenY = screenY;
 
-        sideSize = 20;
+        sideSize = (byte) (screenX / 50);
     }
 
     /**
@@ -55,7 +55,7 @@ public class Ball {
         //Set a new random moving direction
         xSpeed = (short) (new Random().nextInt(600) - 300);
         //set standard "up" speed
-        ySpeed = -500;
+        ySpeed = -600;
     }
 
     /**
@@ -106,7 +106,7 @@ public class Ball {
         middleOfBall -= paddle.left;
         float hitPoint = middleOfBall / (paddle.right - paddle.left);
 
-        xSpeed = (short) (600 * hitPoint - 300);
+        xSpeed = (short) (700 * hitPoint - 350);
         y = (int) paddle.top - sideSize - 1;
         invertY();
     }
@@ -168,9 +168,9 @@ public class Ball {
      */
     private void invertY(){
         if (ySpeed > 0){
-            ySpeed += 4;
+            ySpeed += 5;
         } else {
-            ySpeed -= 4;
+            ySpeed -= 5;
         }
         ySpeed = (short) -ySpeed;
     }

@@ -236,18 +236,18 @@ public class ScoreScreenViewModel extends BaseObservable {
                         setGameFinalScore(tempValue++);
                         Thread.sleep(2);
                     }
+
+                    if (gameFinalScore > lastHighscore){
+                        FX.play(FX.newHighscore, 1, 1, 0, 0, 1);
+                        setNewHighscoreString(c.getString(R.string.score_screen_new_highscore));
+                        model.newHighscore(levelId, gameFinalScore);
+                    }
                 } catch (InterruptedException e) {
                     //If it crashes set the values direct.
                     setGamePoints(gamePoints);
                     setGameFinalScore(gameFinalScore);
                     setGameLife(gameLife);
                     setGameTime(gameTime);
-                } finally {
-                    if (gameFinalScore > lastHighscore){
-                        FX.play(FX.newHighscore, 1, 1, 0, 0, 1);
-                        setNewHighscoreString(c.getString(R.string.score_screen_new_highscore));
-                        model.newHighscore(levelId, gameFinalScore);
-                    }
                 }
             }
         });

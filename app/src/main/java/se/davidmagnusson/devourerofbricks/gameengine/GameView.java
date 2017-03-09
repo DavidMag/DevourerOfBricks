@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -15,6 +16,10 @@ import android.view.SurfaceView;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
+import java.util.TimerTask;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.activities.GameActivity;
@@ -23,6 +28,7 @@ import se.davidmagnusson.devourerofbricks.activities.ScoreScreenActivity;
 import se.davidmagnusson.devourerofbricks.database.SQLiteDB;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Ball;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Paddle;
+import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.PowerUp;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.Brick;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.BrickFactory;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.BrickLayoutGetter;
@@ -43,13 +49,17 @@ public class GameView extends SurfaceView implements Runnable {
     private Paddle paddle;
     private Ball ball;
     private LinkedList<Brick> bricks;
+    private LinkedList<PowerUp> powerUps = new LinkedList<>();
     private byte[] brickLayout;
+
+    private Random random = new Random();
 
     //Game variables
     private byte life;
     private int points;
     private boolean ballDirectionSwitched;
     private byte levelId;
+    private short brickValue = 10;
     //Time variables
     private long gameTimeStart;
     private long gameTimeMillis;
@@ -117,8 +127,6 @@ public class GameView extends SurfaceView implements Runnable {
         this.levelId = level;
         this.brickLayout = new BrickLayoutGetter().getBrickLayout(level);
         createGameScene();
-
-        Log.i("DoB", ""+levelId);
     }
 
     /**
@@ -211,7 +219,10 @@ public class GameView extends SurfaceView implements Runnable {
 
                     if (brick.gotHit()) {
                         FX.play(FX.brickCollision, 1, 1, 0, 0, 1);
-                        points += 10;
+                        points += brickValue;
+                        if (random.nextInt(5) == 1){
+                            powerUps.add(new PowerUp(brick.getRect(), this.getContext(), screenX, screenY));
+                        }
                         iterator.remove();
                     } else {
                         FX.play(FX.hardBrick, 1, 1, 0, 0, 1);
@@ -227,6 +238,16 @@ public class GameView extends SurfaceView implements Runnable {
                 gameEnded(false);
             } else {
                 ball.reset();
+            }
+        }
+
+        //Updates the power ups
+        if (powerUps.size() > 0){
+            for (Iterator<PowerUp> iterator = powerUps.iterator(); iterator.hasNext();){
+                PowerUp p = iterator.next();
+                if (p.update(fps)){
+                    iterator.remove();
+                }
             }
         }
 
@@ -272,6 +293,13 @@ public class GameView extends SurfaceView implements Runnable {
                 }
             }
 
+            //POWER UPS
+            if (powerUps.size() > 0) {
+                for (PowerUp p : powerUps){
+                    canvas.drawBitmap(p.getSprite(), p.getRect().left, p.getRect().top, painter);
+                }
+            }
+
             //hud
             painter.setColor(Color.argb(100, 80, 80, 80));
             canvas.drawRect(0, 0, screenX, (screenY / 10), painter);
@@ -280,6 +308,7 @@ public class GameView extends SurfaceView implements Runnable {
             painter.setTextSize(30);
             hud = lifeStr +": "+ life +" - "+ pointsStr+": "+ points+ " - "+ timeStr +": "+ gameTimeSedonds;
             canvas.drawText(hud , (screenX / 2), (screenY / 20) + 25, painter);
+
 
             //PAUSE
             if (isPaused) {
@@ -309,17 +338,64 @@ public class GameView extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_MOVE:
                 isPaused = false;
 
+                //Movement
                 if (event.getX() < (screenX / 2)){
                     paddle.setMovingDirection(Paddle.LEFT);
                 } else {
                     paddle.setMovingDirection(Paddle.RIGHT);
                 }
+
+                //Power ups
+                if (powerUps.size() > 0){
+                    for (Iterator<PowerUp> iterator = powerUps.iterator(); iterator.hasNext();){
+                        PowerUp p = iterator.next();
+                        //Check if the player pressed inside the power up rect
+                        if (event.getX() > p.getRect().left - 10 && event.getX() < p.getRect().right + 10 &&
+                                event.getY() > p.getRect().top - 10 && event.getY() < p.getRect().bottom + 10)
+                        {
+                            FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                            activatePowerUp(p.activate());
+                            iterator.remove();
+                        }
+                    }
+                }
                 break;
             case MotionEvent.ACTION_UP:
+                //Stop movement
                 paddle.setMovingDirection(Paddle.STOP);
                 break;
         }
         return true;
+    }
+
+    /**
+     * When a player presses a power up this method will be called from the "onTouchEvent" method.
+     * And handles the power up.
+     * @param activate which power up action it is
+     */
+    private void activatePowerUp(String activate) {
+        switch (activate){
+            case "Bigger paddle, 20 sec":
+                paddle.paddlePowerUp(true);
+                break;
+            case "Smaller paddle, 20 sec":
+                paddle.paddlePowerUp(false);
+                break;
+            case "Double points 20 sec":
+                brickValue *= 2;
+                new CountDownTimer(20000, 20000){
+                    @Override
+                    public void onTick(long millisUntilFinished) {}
+                    @Override
+                    public void onFinish() {
+                        brickValue /= 2;
+                    }
+                }.start();
+                break;
+            case "<":
+                life++;
+                break;
+        }
     }
 
     /**

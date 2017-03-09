@@ -1,13 +1,21 @@
 package se.davidmagnusson.devourerofbricks.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.gameengine.GameView;
 import se.davidmagnusson.devourerofbricks.helpers.FX;
 import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
@@ -41,7 +49,7 @@ public class GameActivity extends Activity {
 
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "create");
-        intent.putExtra("song", "music/ingame.mp3"); //TODO change song
+        intent.putExtra("song", "music/ingame.mp3");
         startService(intent);
     }
 
@@ -69,5 +77,70 @@ public class GameActivity extends Activity {
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "pause");
         startService(intent);
+    }
+
+    /**
+     * Called when user presses the back button, asks if the player really wants to leave because
+     * it won't be saved with a custom design alert dialog
+     */
+    @Override
+    public void onBackPressed() {
+        gameView.onPause();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            LayoutInflater inflater = LayoutInflater.from(this);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            View view = inflater.inflate(R.layout.alert_dialog_layout, null);
+            Button yesButton = (Button) view.findViewById(R.id.button_yes);
+            Button noButton = (Button) view.findViewById(R.id.button_no);
+
+            FontReplacer.setAppFont((ViewGroup) view.getRootView(),
+                    Typeface.createFromAsset(getAssets(), "fonts/EarlyGameBoy.ttf"),
+                    false);
+
+            alertDialog.setView(view);
+            final AlertDialog show = alertDialog.create();
+
+            yesButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), MusicPlayerService.class);
+                    intent.putExtra("action", "create");
+                    intent.putExtra("song", "music/first.mp3");
+                    startService(intent);
+                    GameActivity.super.onBackPressed();
+                }
+            });
+            noButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    show.dismiss();
+                    gameView.onResume();
+                }
+            });
+
+            show.show();
+        } else {
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.in_game_warning)
+                    .setCancelable(false)
+                    .setTitle(R.string.in_game_warning)
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getApplicationContext(), MusicPlayerService.class);
+                            intent.putExtra("action", "create");
+                            intent.putExtra("song", "music/first.mp3");
+                            startService(intent);
+                            GameActivity.super.onBackPressed();
+                        }
+                    })
+                    .show();
+        }
     }
 }

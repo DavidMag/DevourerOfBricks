@@ -24,7 +24,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     private boolean ready = false;
     //Needs to be volatile because it's accessed from different threads
     private volatile boolean isInApp;
-    private String currentSong;
+    private String currentSong = "";
 
     public IBinder onBind(Intent arg0) {
         return null;
@@ -109,7 +109,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
                     e.printStackTrace();
                 }
                 if (!isInApp && player != null) {
-                    player.pause();
+                    onDestroy();
                 }
             }
         });
@@ -156,7 +156,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             player.stop();
             player.release();
             player = null;
-            ready = false;
         }
+        ready = false;
     }
 }

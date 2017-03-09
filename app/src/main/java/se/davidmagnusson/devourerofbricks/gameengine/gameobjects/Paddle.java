@@ -1,6 +1,11 @@
 package se.davidmagnusson.devourerofbricks.gameengine.gameobjects;
 
+import android.databinding.tool.util.L;
 import android.graphics.RectF;
+import android.os.CountDownTimer;
+import android.util.Log;
+
+import java.util.TimerTask;
 
 /**
  * The Paddle class is the paddle we will use and is has its own update method that check for
@@ -41,11 +46,11 @@ public class Paddle {
         this.screenY = screenY;
 
         //Set standard speed
-        movementSpeed = 450;
+        movementSpeed = 550;
 
         //Set standard size
-        length = (int) (screenX / 12);
-        height = 10;
+        length = (int) (screenX / 9);
+        height = 14;
 
         //Calc the position and init the RectF with the new values
         x = (int) (screenX / 2 - length / 2);
@@ -106,5 +111,59 @@ public class Paddle {
      */
     public RectF getRect() {
         return paddleRect;
+    }
+
+    /**
+     * Gets called when a paddle power up got hit.
+     * Increases or decreases the paddles length for 20 seconds with a small animation.
+     * @param bigger true if shall grow and false if should be smaller
+     */
+    public void paddlePowerUp(boolean bigger) {
+        int tempAmount;
+        if (bigger){
+            tempAmount = (int) paddleRect.width() / 2;
+        } else {
+            tempAmount = (int) -(paddleRect.width() / 2);
+        }
+        final int amount = tempAmount;
+        Log.i("DoB", "amount: " + amount);
+
+        final CountDownTimer endAnimation = new CountDownTimer(2000, 250) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                length -= amount / 8;
+                Log.i("DoB", "tick 2");
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+
+        final CountDownTimer timer = new CountDownTimer(26000, 26000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                endAnimation.start();
+            }
+        };
+
+        new CountDownTimer(2000, 250) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                length += amount / 8;
+                Log.i("DoB", "tick 1");
+            }
+
+            @Override
+            public void onFinish() {
+                timer.start();
+            }
+        }.start();
     }
 }
