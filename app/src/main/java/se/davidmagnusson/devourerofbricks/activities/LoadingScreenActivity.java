@@ -23,6 +23,7 @@ import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
 public class LoadingScreenActivity extends Activity {
 
     private volatile long timeAtStart;
+    private volatile boolean pressedStart = false;
 
     /**
      * The oncreate method, more or less all the things happens here
@@ -75,7 +76,7 @@ public class LoadingScreenActivity extends Activity {
                 dotAnimation.setLoaded();
 
                 //Make the "press to play" text flashing
-                while (true){
+                while (!pressedStart){
                     try {
                         runOnUiThread(dotAnimation);
                         Thread.sleep(500);
@@ -181,6 +182,7 @@ public class LoadingScreenActivity extends Activity {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    pressedStart = true;
                     FX.play(FX.pressStart, 1, 1, 0, 0, 1);
                     Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                     intent.putExtra("level", getIntent().getByteExtra("level", (byte) 1));
