@@ -5,8 +5,16 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.databinding.LevelSelectionLayoutBinding;
@@ -33,6 +41,11 @@ public class LevelSelectionActivity extends Activity {
         LevelSelectionViewModel viewModel = new LevelSelectionViewModel(this);
         LevelSelectionLayoutBinding binding = DataBindingUtil.setContentView(this, R.layout.level_selection_layout);
         binding.setViewmodel(viewModel);
+
+        MobileAds.initialize(getApplicationContext(), getString(R.string.level_selection_banner_ad_unit_id));
+        AdView ad = (AdView) findViewById(R.id.level_selection_banner_ad);
+        AdRequest adReq = new AdRequest.Builder().build();
+        ad.loadAd(adReq);
 
         FontReplacer.setAppFont((ViewGroup) findViewById(android.R.id.content).getRootView(),
                 Typeface.createFromAsset(getAssets(), "fonts/EarlyGameBoy.ttf"),
@@ -68,5 +81,30 @@ public class LevelSelectionActivity extends Activity {
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "pause");
         startService(intent);
+    }
+
+    public void testClick(View inView){
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.level_how_to_play, null);
+        Button button = (Button) view.findViewById(R.id.level_how_to_play_button);
+
+        FontReplacer.setAppFont((ViewGroup) view.getRootView(),
+                Typeface.createFromAsset(getAssets(), "fonts/EarlyGameBoy.ttf"),
+                false);
+
+        builder.setCancelable(false);
+        builder.setView(view);
+
+        final AlertDialog showDialog = builder.create();
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog.dismiss();
+            }
+        });
+
+        showDialog.show();
     }
 }

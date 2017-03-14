@@ -22,8 +22,6 @@ public class BrickLayoutGetter {
 
      */
 
-
-
     private byte[] stageOne = {
             BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
             BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
@@ -69,6 +67,30 @@ public class BrickLayoutGetter {
             BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK
     };
 
+    private byte[] stageSix = {
+            BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK,
+            BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK,
+            BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK,
+            BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK,
+            BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK
+    };
+
+    private byte[] stageSeven = {
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK,
+    };
+
+    private byte[] stageEight = {
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK, BrickFactory.BASIC_BRICK,
+            BrickFactory.EMPTY_SPACE, BrickFactory.BASIC_BRICK, BrickFactory.EMPTY_SPACE, BrickFactory.BASIC_BRICK, BrickFactory.EMPTY_SPACE,
+            BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK, BrickFactory.TWO_LIFE_BRICK, BrickFactory.INDESTRCTIBLE_BRICK,
+    };
+
     /**
      * Sends back a byte array to put in the BrickFactory.
      * @param level which level the player are going to play
@@ -86,6 +108,12 @@ public class BrickLayoutGetter {
                 return stageFour;
             case 5:
                 return stageFive;
+            case 6:
+                return stageSix;
+            case 7:
+                return stageSeven;
+            case 8:
+                return stageEight;
             default:
                 return null;
         }

@@ -110,11 +110,12 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/button"
             android:textColor="@color/devourer_green"
-            android:onClick="@{viewmodel::onPlayAgainButtonClicked}"/>
+            android:onClick="@{viewmodel::onPlayAgainButtonClicked}"
+            android:textSize="12sp" />
 
         <android.support.constraint.Guideline
             android:layout_width="wrap_content"
-            android:layout_height="592dp"
+            android:layout_height="511dp"
             android:id="@+id/guideline_50"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5"
@@ -134,7 +135,8 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/button"
             android:textColor="@color/devourer_green"
-            android:onClick="@{viewmodel::onMainMenuButtonClick}"/>
+            android:onClick="@{viewmodel::onMainMenuButtonClick}"
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="wrap_content"

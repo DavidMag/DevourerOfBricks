@@ -12,6 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.helpers.FX;
 import se.davidmagnusson.devourerofbricks.helpers.FontReplacer;
@@ -34,12 +38,21 @@ public class MainMenuActivity extends Activity {
 
         setContentView(R.layout.main_menu_layout);
 
+        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_id));
+        AdView ad = (AdView) findViewById(R.id.main_menu_ad);
+        AdRequest adReq = new AdRequest.Builder().build();
+        ad.loadAd(adReq);
+
         checkPreferenceIcon();
 
         final Typeface mFont = Typeface.createFromAsset(getAssets(), "fonts/EarlyGameBoy.ttf");
         final ViewGroup mContainer = (ViewGroup) findViewById(android.R.id.content).getRootView();
         FontReplacer.setAppFont(mContainer, mFont, false);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         Intent intent = new Intent(this, MusicPlayerService.class);
         intent.putExtra("action", "create");
         intent.putExtra("song", "music/first.mp3");
@@ -96,6 +109,12 @@ public class MainMenuActivity extends Activity {
     public void playButtonClicked(View v){
         FX.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
         Intent intent = new Intent(this, LevelSelectionActivity.class);
+        startActivity(intent);
+    }
+
+    public void aboutButtonClicked(View v){
+        FX.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
+        Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 

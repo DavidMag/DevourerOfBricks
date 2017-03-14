@@ -7,6 +7,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
+import com.google.android.gms.ads.InterstitialAd;
+
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.databinding.ScoreScreenLayoutBinding;
 import se.davidmagnusson.devourerofbricks.helpers.FX;
@@ -40,7 +42,9 @@ public class ScoreScreenActivity extends Activity {
                 i.getByteExtra("life",(byte) 0),
                 (int) i.getLongExtra("finalScore", 0),
                 i.getBooleanExtra("won", false),
-                i.getByteExtra("level", (byte)1));
+                i.getByteExtra("level", (byte)1),
+                i.getShortExtra("bricksCrushed", (short)0),
+                i.getShortExtra("powerUps",(short) 0));
         ScoreScreenLayoutBinding binding = DataBindingUtil.setContentView(this, R.layout.score_screen_layout);
         binding.setViewmodel(viewModel);
 

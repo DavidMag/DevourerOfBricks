@@ -18,7 +18,8 @@ public class SQLiteDB extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String DB = "DoBDb";
     private static final String TABLE_ONE = "Levels";
-    private static final String CREATE_QUERY =
+    private static final String TABLE_TWO = "User";
+    private static final String CREATE_QUERY_ONE =
             "CREATE TABLE "+TABLE_ONE+
                     "(id INTEGER PRIMARY KEY," +
                     "levelId INTEGER," +
@@ -29,11 +30,25 @@ public class SQLiteDB extends SQLiteOpenHelper {
     private static final String INIT_INSERT =
             "INSERT INTO " + TABLE_ONE+
             "(levelId, mipmapId, minHighscore, highscore, pending)"+
-            "VALUES (1, 2130903040, 0, 0, 0),"+
-            "(2, 2130903041, 600, 0, 0),"+
-            "(3, 2130903042, 1200, 0, 0),"+
-            "(4, 2130903043, 2000, 0, 0),"+
-            "(5, 2130903044, 3000, 0, 0);";
+            "VALUES (1, 2131165184, 0, 0, 0),"+
+            "(2, 2131165185, 600, 0, 0),"+
+            "(3, 2131165186, 1200, 0, 0),"+
+            "(4, 2131165187, 2000, 0, 0),"+
+            "(5, 2131165188, 3000, 0, 0)," +
+            "(6, 2131165189, 4000, 0, 0),"+
+            "(7, 2131165190, 5000, 0, 0),"+
+            "(8, 2131165191, 7000, 0, 0);";
+
+    private static final String CREATE_QUERY_TWO =
+            "CREATE TABLE "+TABLE_TWO+
+                "(id INTEGET PRIMARY KEY,"+
+                "games INTEGER,"+
+                "bricks INTEGER," +
+                "powerUps INTEGER);";
+    private static final String INIT_INSERT_TWO =
+            "INSERT INTO "+ TABLE_TWO+
+            "(games, bricks, powerUps)" +
+            "VALUES (0, 0, 0);";
 
     /**
      * simple constructor for the class
@@ -50,8 +65,9 @@ public class SQLiteDB extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_QUERY);
+        db.execSQL(CREATE_QUERY_ONE);
         db.execSQL(INIT_INSERT);
+        db.execSQL(CREATE_QUERY_TWO);
     }
 
     /**
@@ -173,4 +189,25 @@ public class SQLiteDB extends SQLiteOpenHelper {
          values.put("pending", 0);
          db.update(TABLE_ONE, values, "levelId=" + levelId, null);
      }
+
+     public int[] increaseUserInfo(short values[]){
+         int result[] = new int[3];
+         SQLiteDatabase db = this.getWritableDatabase();
+         if (values.length == 2) {
+             db.execSQL("UPDATE " + TABLE_TWO + " SET bricks = bricks + " + values[0] + " WHERE id = 1");
+             db.execSQL("UPDATE " + TABLE_TWO + " SET games = games + 1 WHERE id = 1");
+             db.execSQL("UPDATE "+TABLE_TWO+ " SET powerUps = powerUps + "+values[1]+" WHERE id = 1");
+         }
+         Cursor res = db.rawQuery("SELECT * FROM "+TABLE_TWO+" WHERE id = 1", null);
+         if (res.moveToFirst()){
+             result[0] = res.getInt(res.getColumnIndex("bricks"));
+             result[1] = res.getInt(res.getColumnIndex("games"));
+             result[2] = res.getInt(res.getColumnIndex("powerUps"));
+         }
+
+         res.close();
+         db.close();
+
+         return result;
+    }
 }

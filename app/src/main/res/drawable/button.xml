@@ -4,15 +4,16 @@
 
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <stroke android:width="10px" android:color="#00FF00" />
-            <padding android:bottom="40px" android:top="40px"/>
+            <stroke android:width="5dp" android:color="#00FF00" />
+            <padding android:bottom="20dp" android:top="20dp"/>
             <solid android:color="@color/devourer_transparent_green"/>
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <stroke android:width="10px" android:color="#00FF00" />
-            <padding android:bottom="40px" android:top="40px"/>
+            <stroke android:width="5dp" android:color="#00FF00" />
+            <padding android:bottom="20dp" android:top="20dp"/>
+            <solid android:color="@android:color/black"/>
         </shape>
     </item>
 </selector>

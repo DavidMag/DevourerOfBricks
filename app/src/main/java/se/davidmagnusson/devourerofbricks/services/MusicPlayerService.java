@@ -125,12 +125,13 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
             try {
                 AssetFileDescriptor afd = getAssets().openFd(song);
                 player = new MediaPlayer();
+                player.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                player.setLooping(true); // Set looping
+                player.setLooping(true);
                 player.setVolume(100,100);
                 player.setOnPreparedListener(this);
                 player.prepareAsync();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -142,7 +143,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      */
     private void onResume(){
         isInApp = true;
-        if (ready){
+        if (ready && player != null){
             player.start();
         }
     }
@@ -153,7 +154,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @Override
     public void onDestroy() {
         if (player != null) {
-            player.stop();
+            if (player.isPlaying()) {
+                player.stop();
+            }
             player.release();
             player = null;
         }

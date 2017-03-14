@@ -46,11 +46,11 @@ public class Paddle {
         this.screenY = screenY;
 
         //Set standard speed
-        movementSpeed = 550;
+        movementSpeed = (int) (screenY / 2);
 
         //Set standard size
-        length = (int) (screenX / 9);
-        height = 14;
+        length = (int) (screenX / 8);
+        height = (int) (screenY / 80);
 
         //Calc the position and init the RectF with the new values
         x = (int) (screenX / 2 - length / 2);
@@ -126,13 +126,11 @@ public class Paddle {
             tempAmount = (int) -(paddleRect.width() / 2);
         }
         final int amount = tempAmount;
-        Log.i("DoB", "amount: " + amount);
 
         final CountDownTimer endAnimation = new CountDownTimer(2000, 250) {
             @Override
             public void onTick(long millisUntilFinished) {
                 length -= amount / 8;
-                Log.i("DoB", "tick 2");
             }
 
             @Override
@@ -157,7 +155,6 @@ public class Paddle {
             @Override
             public void onTick(long millisUntilFinished) {
                 length += amount / 8;
-                Log.i("DoB", "tick 1");
             }
 
             @Override

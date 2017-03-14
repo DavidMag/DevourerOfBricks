@@ -24,7 +24,7 @@
 
     <TextView
         android:text=""
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/text_hint"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +37,7 @@
         android:textAlignment="center" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/text_loading_dots"
         android:layout_marginStart="16dp"

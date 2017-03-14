@@ -6,8 +6,18 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableArrayList;
 import android.graphics.Typeface;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 
@@ -69,6 +79,35 @@ public class LevelSelectionViewModel extends BaseObservable{
     //</editor-fold>
 
     /**
+     * A button that on click displays a alert dialog which contains info about how to play
+     * @param v the view that called the method
+     */
+    public void howToPlayOnClick(View v){
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(v.getContext(), R.style.AppTheme));
+        LayoutInflater inflater = LayoutInflater.from(v.getContext());
+        View view = inflater.inflate(R.layout.level_how_to_play, null);
+        Button button = (Button) view.findViewById(R.id.level_how_to_play_button);
+
+        FontReplacer.setAppFont((ViewGroup) view.getRootView(),
+                Typeface.createFromAsset(v.getContext().getAssets(), "fonts/EarlyGameBoy.ttf"),
+                false);
+
+        builder.setCancelable(false);
+        builder.setView(view);
+
+        final AlertDialog showDialog = builder.create();
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog.dismiss();
+            }
+        });
+
+        showDialog.show();
+    }
+
+    /**
      * This method sets the adapter and the list for the recycle view
      * @param view the recycle view
      * @param list the list that will be used (the result from getList())
@@ -77,5 +116,4 @@ public class LevelSelectionViewModel extends BaseObservable{
     public static void bindList(RecyclerView view, ObservableArrayList<LevelItemViewModel> list){
         view.setAdapter(new LevelItemAdapter(list));
     }
-
 }

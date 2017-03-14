@@ -86,61 +86,36 @@ public class GameActivity extends Activity {
     @Override
     public void onBackPressed() {
         gameView.onPause();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            LayoutInflater inflater = LayoutInflater.from(this);
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            View view = inflater.inflate(R.layout.alert_dialog_layout, null);
-            Button yesButton = (Button) view.findViewById(R.id.button_yes);
-            Button noButton = (Button) view.findViewById(R.id.button_no);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        View view = inflater.inflate(R.layout.alert_dialog_layout, null);
+        Button yesButton = (Button) view.findViewById(R.id.button_yes);
+        Button noButton = (Button) view.findViewById(R.id.button_no);
 
-            FontReplacer.setAppFont((ViewGroup) view.getRootView(),
-                    Typeface.createFromAsset(getAssets(), "fonts/EarlyGameBoy.ttf"),
-                    false);
+        FontReplacer.setAppFont((ViewGroup) view.getRootView(),
+                Typeface.createFromAsset(getAssets(), "fonts/EarlyGameBoy.ttf"),
+                false);
 
-            alertDialog.setView(view);
-            final AlertDialog show = alertDialog.create();
+        alertDialog.setView(view);
+        final AlertDialog show = alertDialog.create();
 
-            yesButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), MusicPlayerService.class);
-                    intent.putExtra("action", "create");
-                    intent.putExtra("song", "music/first.mp3");
-                    startService(intent);
-                    GameActivity.super.onBackPressed();
-                }
-            });
-            noButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    show.dismiss();
-                    gameView.onResume();
-                }
-            });
-
-            show.show();
-        } else {
-            new AlertDialog.Builder(this)
-                    .setMessage(R.string.in_game_warning)
-                    .setCancelable(false)
-                    .setTitle(R.string.in_game_warning)
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(getApplicationContext(), MusicPlayerService.class);
-                            intent.putExtra("action", "create");
-                            intent.putExtra("song", "music/first.mp3");
-                            startService(intent);
-                            GameActivity.super.onBackPressed();
-                        }
-                    })
-                    .show();
-        }
+        yesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MusicPlayerService.class);
+                intent.putExtra("action", "create");
+                intent.putExtra("song", "music/first.mp3");
+                startService(intent);
+                GameActivity.super.onBackPressed();
+            }
+        });
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                show.dismiss();
+                gameView.onResume();
+            }
+        });
+        show.show();
     }
 }

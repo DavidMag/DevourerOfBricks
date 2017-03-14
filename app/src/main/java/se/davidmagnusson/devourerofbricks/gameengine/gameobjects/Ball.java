@@ -1,5 +1,6 @@
 package se.davidmagnusson.devourerofbricks.gameengine.gameobjects;
 
+import android.content.Context;
 import android.graphics.RectF;
 import android.util.Log;
 
@@ -17,6 +18,10 @@ public class Ball {
     //Some more info about the ball
     private short xSpeed;
     private short ySpeed;
+    private short maxSpeedPerFrame;
+    private short tempSpeedY;
+    private short tempSpeedX;
+    private short xSpan;
     private int x;
     private int y;
 
@@ -31,11 +36,12 @@ public class Ball {
      * @param screenX the screens X resolution (pixels)
      * @param screenY the screens Y resolution (pixels)
      */
-    public Ball(float screenX, float screenY){
+    public Ball(float screenX, float screenY, Context c){
         this.screenX = screenX;
         this.screenY = screenY;
 
-        sideSize = (byte) (screenX / 50);
+        sideSize = (byte) (screenX / 40);
+        xSpan = (short) (screenX);
     }
 
     /**
@@ -43,7 +49,7 @@ public class Ball {
      * Also sets a random xSpeed to start with.
      * Should be called when the game scene is building (new game) and when the ball hits the "floor"
      */
-    public void reset(){
+    public void reset(Context c){
         //Place the ball in the middle of the X axis and 30 % up in the Y axis
         //Or 10 % above the Paddle
         x = (int) (screenX / 2 - sideSize / 2);
@@ -53,9 +59,11 @@ public class Ball {
         ballRect = new RectF(x, y, x + sideSize, y + sideSize);
 
         //Set a new random moving direction
-        xSpeed = (short) (new Random().nextInt(600) - 300);
+        xSpeed = (short) (new Random().nextInt(xSpan) - 300);
         //set standard "up" speed
-        ySpeed = -600;
+        ySpeed =(short) -(screenY * 0.5);
+
+        maxSpeedPerFrame =(short) (sideSize - 2);
     }
 
     /**
@@ -70,21 +78,35 @@ public class Ball {
         collision = false;
 
         if(fps != 0) {
-            if (x + (xSpeed / fps) < 0) { //LEFT WALL
+            if (ySpeed / fps >= maxSpeedPerFrame){
+                tempSpeedY = maxSpeedPerFrame;
+            } else {
+                tempSpeedY = (short)(ySpeed / fps);
+            }
+
+            if (xSpeed / fps >= maxSpeedPerFrame){
+                tempSpeedX = maxSpeedPerFrame;
+            } else {
+                tempSpeedX = (short) (xSpeed / fps);
+            }
+
+            if (x + tempSpeedX < 0) { //LEFT WALL
                 invertX();
-                resetX(0);
+                resetX(x + tempSpeedX + (0 - (x + tempSpeedX)));
                 collision = true;
-            } else if (x + sideSize + (xSpeed / fps) > screenX) { //RIGHT WALL
+            } else if (x + sideSize + tempSpeedX > screenX) { //RIGHT WALL
                 invertX();
-                resetX((int) screenX - sideSize);
+                //resetX((int) screenX - sideSize);
+                resetX((int) (x+tempSpeedX - (x+tempSpeedX - screenX - sideSize)));
                 collision = true;
-            } else if (y + (ySpeed / fps) < (0 + screenY / 10)) { //ROOF
+            } else if (y + tempSpeedY < (0 + screenY / 10)) { //ROOF
                 invertY();
-                resetY((int) screenY / 10);
+                //resetY((int) screenY / 10);
+                resetY(y + tempSpeedY + (0 - y + tempSpeedY));
                 collision = true;
             } else { //NO HIT, REGULAR MOVEMENT
-                x += (xSpeed / fps);
-                y += (ySpeed / fps);
+                x += tempSpeedX;
+                y += tempSpeedY;
 
                 ballRect.left = x;
                 ballRect.right = x + sideSize;
@@ -106,7 +128,7 @@ public class Ball {
         middleOfBall -= paddle.left;
         float hitPoint = middleOfBall / (paddle.right - paddle.left);
 
-        xSpeed = (short) (700 * hitPoint - 350);
+        xSpeed = (short) (xSpan * hitPoint - xSpan / 2);
         y = (int) paddle.top - sideSize - 1;
         invertY();
     }
@@ -126,36 +148,46 @@ public class Ball {
         */
         if (ballRect.bottom >= brick.bottom){               // 8 (7 9)
             invertY();
-            y = (int) brick.bottom + 1;
+            resetY((int) (brick.bottom + (brick.bottom - ballRect.bottom)));
+            //y = (int) brick.bottom + 1;
             if (ballRect.centerX() < brick.left &&
                     xSpeed > 0 && ySpeed > 0){              // 7
                 invertX();
-                x = (int) brick.left - sideSize - 1;
+                resetX((int) (brick.left - sideSize - (ballRect.left - brick.left)));
+                //x = (int) brick.left - sideSize - 1;
             } else if (ballRect.centerX() > brick.right &&
                     xSpeed < 0 && ySpeed > 0){              // 9
                 invertX();
-                x = (int) brick.right + 1;
+                resetX((int) (brick.right + (brick.right - ballRect.right)));
+                //x = (int) brick.right + 1;
             }
         } else if (ballRect.top <= brick.top){              // 2 (1 3)
             invertY();
-            y = (int) brick.top - sideSize - 1;
+            resetY((int) (brick.top - sideSize - (ballRect.top - brick.top)));
+            //y = (int) brick.top - sideSize - 1;
             if (ballRect.centerX() <= brick.left &&
                     xSpeed > 0 && ySpeed < 0){              // 1
-                invertX();
-                x = (int) brick.left - sideSize - 1;
+                resetX((int) (brick.left - sideSize - (ballRect.left - brick.left)));
+                //x = (int) brick.left - sideSize - 1;
             } else if (ballRect.centerX() > brick.right &&
                     xSpeed < 0 && ySpeed < 0){              // 3
                 invertX();
-                x = (int) brick.right + 1;
+                resetX((int) (brick.right + (brick.right - ballRect.right)));
+                //x = (int) brick.right + 1;
             }
         } else {                                            // 4 5 6
-            if (ballRect.left <= brick.left){               // 4
+            if (ballRect.left <= brick.left){// 4
+                Log.i("DoB", "left");
                 invertX();
-                x = (int) brick.left - sideSize - 1;
+                resetX((int) (brick.left - sideSize - (ballRect.left - brick.left)));
+                //x = (int) brick.left - sideSize - 1;
             } else if (ballRect.right >= brick.right){      // 6
+                Log.i("DoB", "right");
                 invertX();
-                x = (int) brick.right + 1;
-            } else {                                        // 5
+                resetX((int)(brick.right + (brick.right - ballRect.right)));
+                //x = (int) brick.right + 1;
+            } else {
+                Log.i("DoB", "middle");// 5
                 invertY();
                 x = (int) brick.centerX();
                 y = (int) brick.bottom + 1;
@@ -168,9 +200,9 @@ public class Ball {
      */
     private void invertY(){
         if (ySpeed > 0){
-            ySpeed += 5;
+            ySpeed += screenX / 200;
         } else {
-            ySpeed -= 5;
+            ySpeed -= screenX / 200;
         }
         ySpeed = (short) -ySpeed;
     }

@@ -17,21 +17,16 @@ import android.view.SurfaceView;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.TimerTask;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 import se.davidmagnusson.devourerofbricks.R;
-import se.davidmagnusson.devourerofbricks.activities.GameActivity;
-import se.davidmagnusson.devourerofbricks.activities.MainMenuActivity;
 import se.davidmagnusson.devourerofbricks.activities.ScoreScreenActivity;
-import se.davidmagnusson.devourerofbricks.database.SQLiteDB;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Ball;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.Paddle;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.PowerUp;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.Brick;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.BrickFactory;
 import se.davidmagnusson.devourerofbricks.gameengine.gameobjects.bricks.BrickLayoutGetter;
+import se.davidmagnusson.devourerofbricks.helpers.BasicUtils;
 import se.davidmagnusson.devourerofbricks.helpers.FX;
 
 /**
@@ -60,6 +55,9 @@ public class GameView extends SurfaceView implements Runnable {
     private boolean ballDirectionSwitched;
     private byte levelId;
     private short brickValue = 10;
+    private short bricksCrushed = 0;
+    private short powerUpsTaken = 0;
+
     //Time variables
     private long gameTimeStart;
     private long gameTimeMillis;
@@ -120,7 +118,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         //Init the game objects
         paddle = new Paddle(screenX, screenY);
-        ball = new Ball(screenX, screenY);
+        ball = new Ball(screenX, screenY, context);
         bricks = new LinkedList<>();
 
         //create the game scene
@@ -173,7 +171,7 @@ public class GameView extends SurfaceView implements Runnable {
         pauseTime = 0;
         startPauseTime = 0;
 
-        ball.reset();
+        ball.reset(this.getContext());
 
         //Brick building
         //Get screen independent block size
@@ -198,10 +196,10 @@ public class GameView extends SurfaceView implements Runnable {
     private void update() {
 
         //Update the game objects
-        paddle.update(fps);
         if (ball.update(fps)){
             FX.play(FX.hardBrick, 1, 1, 0, 0, 1);
         }
+        paddle.update(fps);
 
         //Check if ball and paddle collides
         if (RectF.intersects(ball.getRect(), paddle.getRect())){
@@ -220,6 +218,7 @@ public class GameView extends SurfaceView implements Runnable {
                     if (brick.gotHit()) {
                         FX.play(FX.brickCollision, 1, 1, 0, 0, 1);
                         points += brickValue;
+                        bricksCrushed++;
                         if (random.nextInt(5) == 1){
                             powerUps.add(new PowerUp(brick.getRect(), this.getContext(), screenX, screenY));
                         }
@@ -237,7 +236,7 @@ public class GameView extends SurfaceView implements Runnable {
             if (--life == 0){
                 gameEnded(false);
             } else {
-                ball.reset();
+                ball.reset(this.getContext());
             }
         }
 
@@ -305,7 +304,7 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawRect(0, 0, screenX, (screenY / 10), painter);
             painter.setColor(Color.argb(255, 0, 255, 0)); //GREEN
             painter.setTextAlign(Paint.Align.CENTER);
-            painter.setTextSize(30);
+            painter.setTextSize(BasicUtils.convertDpToPixel(10, this.getContext()));
             hud = lifeStr +": "+ life +" - "+ pointsStr+": "+ points+ " - "+ timeStr +": "+ gameTimeSedonds;
             canvas.drawText(hud , (screenX / 2), (screenY / 20) + 25, painter);
 
@@ -354,6 +353,7 @@ public class GameView extends SurfaceView implements Runnable {
                                 event.getY() > p.getRect().top - 10 && event.getY() < p.getRect().bottom + 10)
                         {
                             FX.play(FX.countingPoints, 1, 1, 0, 0, 1);
+                            powerUpsTaken++;
                             activatePowerUp(p.activate());
                             iterator.remove();
                         }
@@ -489,6 +489,8 @@ public class GameView extends SurfaceView implements Runnable {
         intent.putExtra("life", life);
         intent.putExtra("finalScore", points * (life + levelId / 2) - gameTimeSedonds);
         intent.putExtra("level", levelId);
+        intent.putExtra("bricksCrushed", bricksCrushed);
+        intent.putExtra("powerUps", powerUpsTaken);
 
         getContext().startActivity(intent);
     }

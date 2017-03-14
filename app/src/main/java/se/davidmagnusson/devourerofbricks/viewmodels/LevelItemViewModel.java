@@ -20,7 +20,7 @@ public class LevelItemViewModel {
     private int highscore;
     private String highscoreString;
     private int imgId;
-    public int minHighscore;
+    private int minHighscore;
     private boolean unlocked;
     public int pending;
 
@@ -34,7 +34,7 @@ public class LevelItemViewModel {
         if (totalHighscore < minHighscore){
             highscoreString = c.getResources().getString(R.string.level_item_not_unlocked, minHighscore);
             unlocked = false;
-            this.imgId = R.mipmap.bricklayout_locked;
+            this.imgId = R.raw.bricklayout_locked;
         } else {
             highscoreString = c.getResources().getString(R.string.level_item_high_score) + highscore;
             unlocked = true;
@@ -46,7 +46,6 @@ public class LevelItemViewModel {
         this.minHighscore = minHighscore;
 
         FX.initFX(c.getApplicationContext());
-
     }
 
     //<editor-fold desc="GETTERS AND SETTERS">

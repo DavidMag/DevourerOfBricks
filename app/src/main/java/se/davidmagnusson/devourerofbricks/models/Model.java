@@ -82,4 +82,24 @@ public class Model {
 
         db.insertHighscore(levelId, newHighscore, pending);
     }
+
+    /**
+     * Updates the database and game services about the users progress such as how many bricks
+     * the player have smahsed, the number of power ups the player has taken and how many games the
+     * player has played.
+     * @param values contains new info [0]=Number of bricks player destroyed this game,
+     *               [1]=number of power ups the player took
+     */
+    public void updateBricksCrushed(short[] values){
+        int[] res;
+
+        res = db.increaseUserInfo(values);
+        //res[0] = bricks
+        //res[1] = games
+        //res[2] = powerUps
+
+        /*
+        TODO SEND TO GAME SERVICE
+         */
+    }
 }

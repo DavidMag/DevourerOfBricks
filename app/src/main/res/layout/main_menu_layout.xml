@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto">
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -111,6 +112,7 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/button"
             android:textColor="@color/devourer_green"
+            android:onClick="aboutButtonClicked"
             />
 
         <ImageButton
@@ -128,7 +130,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:visibility="visible"
             style="@android:style/Widget.ImageButton"
-            android:onClick="soundButtonPressed"/>
+            android:onClick="soundButtonPressed" />
 
         <ImageButton
             app:srcCompat="@raw/music_on"
@@ -143,7 +145,21 @@
             android:layout_marginStart="16dp"
             android:visibility="visible"
             android:layout_height="24dp"
-            android:onClick="musicButtonPressed" />
+            android:onClick="musicButtonPressed"/>
+
+        <com.google.android.gms.ads.AdView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_menu_ad"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/main_menu_banner_ad_unit_id"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginStart="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

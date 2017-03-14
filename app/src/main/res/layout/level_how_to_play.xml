@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="300dp"
+    android:minWidth="500dp"
+    android:fillViewport="true"
+    android:isScrollContainer="true"
+    android:overScrollMode="never"
+    android:fadingEdge="none"
+    android:adjustViewBounds="true"
+    android:scrollbarStyle="insideInset"
+    android:background="@drawable/alert_dialog">
+<android.support.constraint.ConstraintLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="300dp">
+    <TextView
+        android:text="@string/level_selection_how_to_play_title"
+        android:layout_width="352dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/level_how_to_play_title"
+        android:textColor="@color/devourer_green"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAlignment="center"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="@string/level_selection_how_to_play_body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/level_how_to_play_body"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/level_how_to_play_title"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="@color/devourer_green"
+        android:textAlignment="textStart" />
+
+    <Button
+        android:text="@android:string/yes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/level_how_to_play_button"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/level_how_to_play_body"
+        android:layout_marginStart="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/button"
+        android:textColor="@color/devourer_green" />
+</android.support.constraint.ConstraintLayout>
+</ScrollView>

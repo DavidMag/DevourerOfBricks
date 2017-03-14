@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewmodel"
@@ -16,8 +18,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginEnd="16dp"
@@ -25,7 +25,8 @@
         android:textSize="24sp"
         android:gravity="center_horizontal"
         android:textAlignment="center"
-        android:textColor="@color/devourer_green"/>
+        android:textColor="@color/devourer_green"
+        app:layout_constraintTop_toBottomOf="@+id/level_how_to_play_button" />
 
     <TextView
         android:text="@string/level_selection_total_highscore"
@@ -49,17 +50,49 @@
         android:layout_marginStart="8dp"
         app:layout_constraintLeft_toRightOf="@+id/textview_highscore" />
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="368dp"
-        android:layout_height="498dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/textview_highscore"
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/level_selection_banner_ad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/level_selection_banner_ad_unit_id"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/level_selection_banner_ad"
+        app:layout_constraintTop_toBottomOf="@+id/textview_highscore"
         android:id="@+id/recview"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:items="@{viewmodel.list}"/>
+        app:items="@{viewmodel.list}"
+        android:layout_width="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/black" />
+
+    <Button
+        android:layout_height="48dp"
+        android:id="@+id/level_how_to_play_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:onClick="@{viewmodel::howToPlayOnClick}"
+        android:visibility="visible"
+        android:scaleType="centerCrop"
+        android:cropToPadding="false"
+        android:text="@string/level_selection_how_to_button"
+        android:background="@android:color/transparent"
+        android:textColor="@color/devourer_green"
+        android:textSize="18sp"
+        android:layout_width="48dp" />
 </android.support.constraint.ConstraintLayout>
 </layout>

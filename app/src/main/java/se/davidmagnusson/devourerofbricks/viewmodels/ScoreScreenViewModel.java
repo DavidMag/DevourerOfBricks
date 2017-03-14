@@ -6,6 +6,12 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.View;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+
+import java.util.Random;
+
 import se.davidmagnusson.devourerofbricks.R;
 import se.davidmagnusson.devourerofbricks.activities.LevelSelectionActivity;
 import se.davidmagnusson.devourerofbricks.activities.MainMenuActivity;
@@ -41,6 +47,9 @@ public class ScoreScreenViewModel extends BaseObservable {
     //The thread we will use at the counting animation
     private Thread animationThread;
 
+    //The fullscreen ad
+    private InterstitialAd fullAd;
+
     /**
      * The constructor initialises the model and the FX, and then sets the new values with the
      * setValues() method
@@ -52,8 +61,19 @@ public class ScoreScreenViewModel extends BaseObservable {
      * @param gameWon if the player won or lost as a boolean
      * @param levelId which level it was
      */
-    public ScoreScreenViewModel(Context c, int gameTime, int gamePoints, int gameLife, int gameFinalScore, boolean gameWon, byte levelId){
+    public ScoreScreenViewModel(Context c, int gameTime, int gamePoints, int gameLife, int gameFinalScore, boolean gameWon, byte levelId, short bricksCrushed, short powerUps){
+
+        fullAd = new InterstitialAd(c);
+        fullAd.setAdUnitId(c.getString(R.string.score_screen_fullscreen_ad));
+        AdRequest adReq = new AdRequest.Builder()
+                .addTestDevice(c.getString(R.string.ad_id))
+                .build();
+        fullAd.loadAd(adReq);
+
+
         model = Model.getInstance(c);
+        short[] modelInsert = {bricksCrushed, powerUps};
+        model.updateBricksCrushed(modelInsert);
 
         this.tempGameFinalScore = gameFinalScore;
         this.tempGamePoints = gamePoints;
@@ -234,7 +254,7 @@ public class ScoreScreenViewModel extends BaseObservable {
                     while (tempValue <= gameFinalScore){
                         FX.play(FX.countingPoints, volume, volume, 0, 0, 1);
                         setGameFinalScore(tempValue++);
-                        Thread.sleep(2);
+                        Thread.sleep(1);
                     }
 
                     if (gameFinalScore > lastHighscore){
@@ -259,20 +279,40 @@ public class ScoreScreenViewModel extends BaseObservable {
      * Plays button press sound and starts main menu
      * @param v the button that got pressed as a view
      */
-    public void onMainMenuButtonClick(View v){
-        FX.play(FX.menuButtonClicked, 1, 1,0, 0, 1);
-        Intent intent = new Intent(v.getContext(), MainMenuActivity.class);
-        v.getContext().startActivity(intent);
+    public void onMainMenuButtonClick(final View v){
+        FX.play(FX.menuButtonClicked, 1, 1, 0, 0, 1);
+        if (fullAd.isLoaded() && new Random().nextInt(3) == 1){
+            fullAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    sendIntent(MainMenuActivity.class, v);
+                }
+            });
+            fullAd.show();
+        } else {
+            sendIntent(MainMenuActivity.class, v);
+        }
     }
 
     /**
      * Plays button press sound and starts the level selection menu
      * @param v the button that got pressed on as a view
      */
-    public void onPlayAgainButtonClicked(View v){
+    public void onPlayAgainButtonClicked(final View v){
         FX.play(FX.menuButtonClicked, 1, 1,0, 0, 1);
-        Intent intent = new Intent(v.getContext(), LevelSelectionActivity.class);
-        v.getContext().startActivity(intent);
+        if (fullAd.isLoaded() && new Random().nextInt(4) == 1){
+            fullAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    sendIntent(LevelSelectionActivity.class, v);
+                }
+            });
+            fullAd.show();
+        } else {
+            sendIntent(LevelSelectionActivity.class, v);
+        }
     }
 
     /**
@@ -305,5 +345,15 @@ public class ScoreScreenViewModel extends BaseObservable {
                 model.newHighscore(this.levelId, this.gameFinalScore);
             }
         }
+    }
+
+    /**
+     * Method that sends a intent to start a new activity
+     * @param c the class that will be started
+     * @param v the view that called the intent used to get context
+     */
+    private void sendIntent(Class<?> c, View v){
+        Intent intent = new Intent(v.getContext(), c);
+        v.getContext().startActivity(intent);
     }
 }

@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 
 import java.util.Random;
-import java.util.RandomAccess;
 
 import se.davidmagnusson.devourerofbricks.R;
+import se.davidmagnusson.devourerofbricks.helpers.BasicUtils;
 
 /**
  * The class for the power ups
@@ -18,7 +17,7 @@ public class PowerUp {
 
     private RectF powerRect;
     private Bitmap sprite;
-    private float radius = 24;
+    private float radius;
 
     private int xSpeed;
     private int ySpeed;
@@ -38,6 +37,9 @@ public class PowerUp {
      */
     public PowerUp(RectF brick, Context c, float screenX, float screenY){
         Random random = new Random();
+
+        radius = BasicUtils.convertDpToPixel(12, c);
+
         powerRect = new RectF(
                 brick.centerX() - radius,
                 brick.centerY() - radius,
@@ -48,8 +50,11 @@ public class PowerUp {
         this.screenX = screenX;
         this.screenY = screenY;
 
-        xSpeed = random.nextInt(600) - 300;
-        ySpeed = random.nextInt(600) - 300;
+        int tempSpeed =(int) (screenY / 4);
+
+
+        xSpeed = random.nextInt(tempSpeed) - tempSpeed / 2;
+        ySpeed = random.nextInt(tempSpeed) - tempSpeed / 2;
 
         setPower(random.nextInt(4), c);
     }
@@ -61,19 +66,20 @@ public class PowerUp {
      */
     public boolean update(long fps){
         boolean outSideScreen = false;
+        if (fps != 0) {
 
-        powerRect.left += xSpeed / fps;
-        powerRect.right += xSpeed / fps;
-        powerRect.top += ySpeed / fps;
-        powerRect.bottom += ySpeed / fps;
+            powerRect.left += xSpeed / fps;
+            powerRect.right += xSpeed / fps;
+            powerRect.top += ySpeed / fps;
+            powerRect.bottom += ySpeed / fps;
 
-        if (
-                powerRect.right < 0 ||
-                powerRect.left > screenX ||
-                powerRect.bottom < 0 ||
-                powerRect.top > screenY)
-        {
-            outSideScreen = true;
+            if (
+                    powerRect.right < 0 ||
+                            powerRect.left > screenX ||
+                            powerRect.bottom < screenY * 0.1 ||
+                            powerRect.top > screenY) {
+                outSideScreen = true;
+            }
         }
 
         return outSideScreen;

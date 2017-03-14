@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Devourer of Bricks</string>
+    <string name="ad_id">pub-5061023538841530</string>
 
     <!-- IN GAME STRINGS -->
     <string name="in_game_paused">PAUSED</string>
@@ -20,6 +21,8 @@
     <string name="main_menu_button_play">play</string>
     <string name="main_menu_button_game_service">game services</string>
     <string name="main_menu_button_about">about</string>
+    <string name="main_menu_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
 
     <!-- LEVEL SELECTION -->
     <string name="level_selection_title">Select level to play</string>
@@ -27,6 +30,12 @@
     <string name="level_item_level">level</string>
     <string name="level_item_high_score">high score: </string>
     <string name="level_item_not_unlocked">Unlocks at: %d</string>
+    <string name="level_selection_how_to_button">\?</string>
+    <string name="level_selection_how_to_play_title">How to play</string>
+    <string name="level_selection_how_to_play_body">Paddle:\nTo steer the paddle you press either the left side of the screen or the right side.
+    You just sets the moving direction left or right, the paddle won\'t follow your finger.\n\nPower ups:\nTo get the power up you tap on it,
+    but be careful there can also be debuffs.</string>
+    <string name="level_selection_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- SCORE SCREEN -->
     <string name="score_screen_game_won">GAME WON</string>
@@ -38,6 +47,7 @@
     <string name="score_screen_new_highscore">NEW HIGH SCORE</string>
     <string name="score_screen_button_menu">Main Menu</string>
     <string name="score_screen_button_play">Play Again</string>
+    <string name="score_screen_fullscreen_ad">ca-app-pub-3940256099942544/1033173712</string>
 
     <!-- LOADING SCREEN -->
     <string name="loading_screen_loading">LOADING</string>
@@ -62,4 +72,24 @@
         <item>No matter how tempting it might may be, never watch youtube poop!</item>
         <item>&lt;</item>
     </string-array>
+
+    <!-- ABOUT -->
+    <string name="about_title">About</string>
+    <string name="about_body" formatted="false">Development and design: &lt;a href="https://github.com/DavidMag"&gt;David Magnusson&lt;/a&gt;
+    &lt;br/&gt;&lt;br/&gt;
+        Music by: &lt;a href="https://www.reverbnation.com/musician/kennethmagnusson"&gt;Kenneth Magnusson&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;
+    Button sound/&lt;a href="https://www.freesound.org/people/Cabeeno%20Rossley/sounds/126418/"&gt;button select&lt;/a&gt;*:
+        &lt;a href="https://www.freesound.org/people/Cabeeno%20Rossley/"&gt;Cabeeno Rossley&lt;/a&gt;
+    &lt;br/&gt;
+    Counting points/&lt;a href="https://www.freesound.org/people/ProjectsU012/sounds/341695/"&gt;Coins 1&lt;/a&gt;*:
+        &lt;a href="https://www.freesound.org/people/ProjectsU012/"&gt;ProjectsU012&lt;/a&gt;
+    &lt;br/&gt;
+    New highscore/&lt;a href="https://www.freesound.org/people/LittleRobotSoundFactory/sounds/270330/"&gt;Jingle_Achievement_01&lt;/a&gt;*:
+        &lt;a href="https://www.freesound.org/people/LittleRobotSoundFactory/"&gt;LittleRobotSoundFactory&lt;/a&gt;
+    &lt;br/&gt;
+    Ball crash/&lt;a href="https://www.freesound.org/people/LittleRobotSoundFactory/sounds/270306/"&gt;Explosion_02&lt;/a&gt;*:
+        &lt;a href="https://www.freesound.org/people/LittleRobotSoundFactory/"&gt;LittleRobotSoundFactory&lt;/a&gt;
+    &lt;br/&gt;&lt;br/&gt;
+    * Under the &lt;a href="https://creativecommons.org/licenses/by/3.0/"&gt;CC BY&lt;/a&gt; license and may have been slightly edited such as shortened or adjusted the volume.</string>
+    <string name="about_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>
